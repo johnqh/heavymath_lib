@@ -1,0 +1,74 @@
+{
+  "name": "@heavymath/lib",
+  "version": "0.0.1",
+  "description": "Business logic library for Heavymath prediction market platform",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "check-all": "npm run lint && npm run typecheck && npm run test:run",
+    "quick-check": "npm run lint && npm run typecheck",
+    "dev": "npm run build:watch"
+  },
+  "keywords": [
+    "heavymath",
+    "prediction-market",
+    "typescript",
+    "business-logic",
+    "react",
+    "react-native"
+  ],
+  "author": "John Huang",
+  "license": "BUSL-1.1",
+  "devDependencies": {
+    "@tanstack/react-query": "^5.90.5",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "@vitest/coverage-v8": "^4.0.4",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "happy-dom": "^20.0.8",
+    "prettier": "^3.6.2",
+    "react": "^19.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vitest": "^4.0.4"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.90.5",
+    "react": "^19.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnqh/heavymath_lib.git"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
