@@ -38,6 +38,8 @@
   "author": "John Huang",
   "license": "BUSL-1.1",
   "devDependencies": {
+    "@heavymath/indexer_client": "file:../heavymath_indexer_client",
+    "@sudobility/sports_api_client": "file:../sports_api_client",
     "@tanstack/react-query": "^5.90.5",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^24.9.1",
@@ -57,6 +59,8 @@
     "vitest": "^4.0.4"
   },
   "peerDependencies": {
+    "@heavymath/indexer_client": "*",
+    "@sudobility/sports_api_client": "*",
     "@tanstack/react-query": "^5.90.5",
     "react": "^19.2.0"
   },
