@@ -11,42 +11,11 @@
  */
 
 // ============================================================================
-// PLACEHOLDER EXPORTS
+// EXPORTS
 // ============================================================================
 
-// Business logic will be added here as the project grows
-// Example structure:
-//
-// export {
-//   // Core business operations
-//   MarketOperations,
-//   PredictionOperations,
-//   DealerOperations,
-//
-//   // React hooks
-//   useMarket,
-//   usePredictions,
-//   useDealer,
-//   useUserBets,
-//
-//   // Context providers
-//   HeavymathProvider,
-// } from './business';
-//
-// export type {
-//   // Core types
-//   MarketData,
-//   PredictionData,
-//   DealerData,
-//   UserBet,
-// } from './types';
-//
-// export {
-//   // Utility functions
-//   formatOdds,
-//   calculatePayout,
-//   validatePrediction,
-// } from './utils';
+// React hooks
+export * from './hooks';
 
 /**
  * Library version
