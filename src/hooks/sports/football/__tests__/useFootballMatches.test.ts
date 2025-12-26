@@ -10,12 +10,12 @@ vi.mock('@sudobility/sports_api_client', () => ({
 }));
 
 // Mock the indexer_client
-vi.mock('@heavymath/indexer_client', () => ({
+vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
 }));
 
 import { useFootballFixtures } from '@sudobility/sports_api_client';
-import { useFavorites } from '@heavymath/indexer_client';
+import { useFavorites } from '@sudobility/heavymath_indexer_client';
 
 const mockUseFootballFixtures = vi.mocked(useFootballFixtures);
 const mockUseFavorites = vi.mocked(useFavorites);

@@ -1,13 +1,12 @@
 /**
- * Hook for football teams with favorites support
- * Combines useFootballTeams from sports_api_client with useFavorites from indexer_client
+ * Hook for handball teams with favorites support
  */
 
 import { useCallback, useMemo } from 'react';
 import {
-  type FootballTeamResponse,
-  type FootballTeamsParams,
-  useFootballTeams as useFootballTeamsApi,
+  type HandballTeamResponse,
+  type HandballTeamsParams,
+  useHandballTeams as useHandballTeamsApi,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
@@ -16,29 +15,20 @@ import {
 } from '@sudobility/heavymath_indexer_client';
 
 const FAVORITES_CATEGORY = 'sports';
-const FAVORITES_SUBCATEGORY = 'football';
+const FAVORITES_SUBCATEGORY = 'handball';
 const FAVORITES_TYPE = 'team';
 
-/**
- * Football team with favorite status
- */
-export interface FootballTeamWithFavorite extends FootballTeamResponse {
+export interface HandballTeamWithFavorite extends HandballTeamResponse {
   favorited: boolean;
 }
 
-/**
- * Options for useFootballTeams hook
- */
-export interface UseFootballTeamsOptions {
-  params: FootballTeamsParams;
+export interface UseHandballTeamsOptions {
+  params?: HandballTeamsParams;
   enabled?: boolean;
 }
 
-/**
- * Return type for useFootballTeams hook
- */
-export interface UseFootballTeamsResult {
-  teams: FootballTeamWithFavorite[];
+export interface UseHandballTeamsResult {
+  teams: HandballTeamWithFavorite[];
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
@@ -48,42 +38,13 @@ export interface UseFootballTeamsResult {
   removeFavoritePending: boolean;
 }
 
-/**
- * Hook to fetch football teams with favorite status
- *
- * @param indexerClient - IndexerClient instance for favorites operations
- * @param walletAddress - User's wallet address for favorites
- * @param options - Query options with required params (at least one filter required)
- * @returns Query result with team data including favorite status
- *
- * @example
- * ```typescript
- * function TeamList({ leagueId, season }: Props) {
- *   const { teams, isLoading, setFavorited } = useFootballTeams(
- *     indexerClient,
- *     walletAddress,
- *     { params: { league: leagueId, season } }
- *   );
- *
- *   return teams.map(team => (
- *     <TeamCard
- *       key={team.team.id}
- *       team={team}
- *       onFavorite={() => setFavorited(team.team.id, !team.favorited)}
- *     />
- *   ));
- * }
- * ```
- */
-export function useFootballTeams(
+export function useHandballTeams(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,
-  options: UseFootballTeamsOptions
-): UseFootballTeamsResult {
-  // Fetch teams from sports API
-  const teamsQuery = useFootballTeamsApi(options);
+  options?: UseHandballTeamsOptions
+): UseHandballTeamsResult {
+  const teamsQuery = useHandballTeamsApi(options);
 
-  // Fetch favorites for football teams
   const {
     favorites,
     isLoading: favoritesLoading,
@@ -95,25 +56,21 @@ export function useFootballTeams(
     type: FAVORITES_TYPE,
   });
 
-  // Create a set of favorited team IDs for O(1) lookup
   const favoritedIds = useMemo(() => {
     return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
-  // Combine teams with favorite status
-  const teams = useMemo<FootballTeamWithFavorite[]>(() => {
+  const teams = useMemo<HandballTeamWithFavorite[]>(() => {
     const response = teamsQuery.data?.response ?? [];
     return response.map(team => ({
       ...team,
-      favorited: favoritedIds.has(String(team.team.id)),
+      favorited: favoritedIds.has(String(team.id)),
     }));
   }, [teamsQuery.data?.response, favoritedIds]);
 
-  // Set favorite status for a team
   const setFavorited = useCallback(
     async (teamId: number, favorited: boolean) => {
       const itemId = String(teamId);
-
       if (favorited) {
         await addFavorite.mutateAsync({
           category: FAVORITES_CATEGORY,

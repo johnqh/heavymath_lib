@@ -9,7 +9,11 @@ import {
   type FootballFixturesParams,
   useFootballFixtures,
 } from '@sudobility/sports_api_client';
-import { type IndexerClient, useFavorites } from '@heavymath/indexer_client';
+import {
+  type IndexerClient,
+  useFavorites,
+  type WalletFavoriteData,
+} from '@sudobility/heavymath_indexer_client';
 
 const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'football';
@@ -105,7 +109,7 @@ export function useFootballMatches(
 
   // Create a set of favorited fixture IDs for O(1) lookup
   const favoritedIds = useMemo(() => {
-    return new Set(favorites.map(f => f.itemId));
+    return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
   // Combine matches with favorite status
@@ -130,7 +134,9 @@ export function useFootballMatches(
           id: itemId,
         });
       } else {
-        const favorite = favorites.find(f => f.itemId === itemId);
+        const favorite = favorites.find(
+          (f: WalletFavoriteData) => f.itemId === itemId
+        );
         if (favorite) {
           await removeFavorite.mutateAsync(favorite.id);
         }
