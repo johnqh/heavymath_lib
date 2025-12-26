@@ -7,6 +7,14 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./src/test/setup.ts'],
     exclude: ['node_modules/**', 'dist/**'],
+    server: {
+      deps: {
+        inline: [
+          '@sudobility/sports_api_client',
+          '@sudobility/heavymath_indexer_client',
+        ],
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
