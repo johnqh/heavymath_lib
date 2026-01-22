@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_lib",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Business logic library for Heavymath prediction market platform",
   "type": "module",
   "main": "dist/index.js",
@@ -35,8 +35,8 @@
   "author": "John Huang",
   "license": "BUSL-1.1",
   "peerDependencies": {
-    "@sudobility/auctions_contracts": "^0.1.9",
-    "@sudobility/heavymath_contracts": "^0.1.4",
+    "@sudobility/auctions_contracts": "^0.1.10",
+    "@sudobility/heavymath_contracts": "^0.1.9",
     "@sudobility/heavymath_indexer_client": "^0.0.3",
     "@sudobility/heavymath_types": "^0.0.6",
     "@sudobility/sports_api_client": "^1.0.12",
@@ -46,11 +46,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@sudobility/auctions_contracts": "^0.1.9",
-    "@sudobility/heavymath_contracts": "^0.1.4",
+    "@sudobility/auctions_contracts": "^0.1.10",
+    "@sudobility/heavymath_contracts": "^0.1.9",
     "@sudobility/heavymath_indexer_client": "^0.0.3",
     "@sudobility/heavymath_types": "^0.0.6",
-    "@sudobility/sports_api_client": "^1.0.10",
+    "@sudobility/sports_api_client": "^1.0.12",
     "@sudobility/types": "^1.9.48",
     "@tanstack/react-query": "^5.90.5",
     "@testing-library/react": "^16.3.2",

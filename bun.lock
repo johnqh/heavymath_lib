@@ -5,11 +5,11 @@
       "name": "@sudobility/heavymath_lib",
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/auctions_contracts": "^0.1.9",
-        "@sudobility/heavymath_contracts": "^0.1.4",
+        "@sudobility/auctions_contracts": "^0.1.10",
+        "@sudobility/heavymath_contracts": "^0.1.9",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
         "@sudobility/heavymath_types": "^0.0.6",
-        "@sudobility/sports_api_client": "^1.0.10",
+        "@sudobility/sports_api_client": "^1.0.12",
         "@sudobility/types": "^1.9.48",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/react": "^16.3.2",
@@ -28,8 +28,8 @@
         "vitest": "^4.0.4",
       },
       "peerDependencies": {
-        "@sudobility/auctions_contracts": "^0.1.9",
-        "@sudobility/heavymath_contracts": "^0.1.4",
+        "@sudobility/auctions_contracts": "^0.1.10",
+        "@sudobility/heavymath_contracts": "^0.1.9",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
         "@sudobility/heavymath_types": "^0.0.6",
         "@sudobility/sports_api_client": "^1.0.12",
@@ -220,17 +220,19 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/auctions_contracts": ["@sudobility/auctions_contracts@0.1.9", "", { "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-pqPobf7yhb2dd2KEPlGqUr8uMoFO3RlYnqIjtApwjmR4ZtL3SnNvJs/C+2vzgKE104mqXw9DKdwIyzG0qNLCYw=="],
+    "@sudobility/auctions_contracts": ["@sudobility/auctions_contracts@0.1.10", "", { "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-872QQDTE8pnzAppYGXtDLTLAu3t3afHqrKVS0RS9eQZ5N5yKWXbl1ieWv3Q16gys2T2hw9CHb5DYruakxdFlCg=="],
+
+    "@sudobility/configs": ["@sudobility/configs@0.0.60", "", { "peerDependencies": { "@sudobility/types": "^1.9.48" } }, "sha512-dHyIKO58utP4w9WqhAzyBBOnzDvXNV+Sx+eQBzwwA0hZ9ge2s+m68wJUPv/yzGW5P990uxYP4/OoI/Bucq545A=="],
 
     "@sudobility/di": ["@sudobility/di@1.5.25", "", { "peerDependencies": { "@notifee/react-native": ">=7.0.0", "@react-native-async-storage/async-storage": ">=1.19.0", "@react-native-community/netinfo": ">=9.0.0", "@react-native-firebase/analytics": ">=18.0.0", "@react-native-firebase/app": ">=18.0.0", "@react-native-firebase/messaging": ">=18.0.0", "@react-native-firebase/remote-config": ">=18.0.0", "@sudobility/types": "^1.9.48", "firebase": ">=10.0.0", "react": ">=18.0.0", "react-native": ">=0.70.0" }, "optionalPeers": ["@notifee/react-native", "@react-native-async-storage/async-storage", "@react-native-community/netinfo", "@react-native-firebase/analytics", "@react-native-firebase/app", "@react-native-firebase/messaging", "@react-native-firebase/remote-config", "firebase", "react-native"] }, "sha512-SJjo/zDiK6UlC35JHOzW3BIfPAwXjTRO5NfKc3mTqiVqekc0F8IX9IylUfXIWLbWYp13jOGTA3FY3huQnPBxWA=="],
 
-    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.4", "", { "dependencies": { "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "react": "^18.0.0 || ^19.0.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "react", "viem"] }, "sha512-7wMyHle0zwmQByBS7h2U4xUHUmlKkb5LsWwXpqOmdHxFOnlI0vjjpjidcMVy71Sf06xY1ltTfXV5MsuAa+BAZw=="],
+    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.9", "", { "dependencies": { "@openzeppelin/contracts-upgradeable": "^5.0.0", "@sudobility/configs": "^0.0.60", "@sudobility/types": "^1.9.48" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/heavymath_types": "^0.0.6", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-HQxCSuYpyjc/xnLU0GLb6iZFxNkxYg+2x7jjyh5t6ATIy10sq/0Q0nMxryzB6UWpK7ovI1bFN+Ew73PCb4DOCg=="],
 
     "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.3", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.1", "@sudobility/types": "^1.9.31", "@tanstack/react-query": "^5.90.5", "react": "^19.2.0", "zustand": "^5.0.0" } }, "sha512-KI/079wAvnN9k84mfuGZdGTkwxN8iCySLNPTqEFxzrc50u04ltc5vCzaiafPufp3EMhzU2TQHBYrexnW1fV52w=="],
 
     "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.6", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-Mc+1d3wEcKf+T/jUzDEjFVf1md0rOYpJrCJ+EYYaIeTggF6kMWViXrTzifGYbHEJRAYXLVKAe8+MWhsbtzUiiA=="],
 
-    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.10", "", { "peerDependencies": { "@sudobility/di": "^1.5.25", "@sudobility/types": "^1.9.48", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-GswDgNHGX68qEW4IZ6jY7jzN1w6viUqa6OGdgAKN9GXvMQYQX2U+76eTym09p5/f8c6hPznlYEop/ZXoV3PM7g=="],
+    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.12", "", { "peerDependencies": { "@sudobility/di": "^1.5.25", "@sudobility/types": "^1.9.48", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-sJUxcKsyBBC0PBQFAxcCGQP3A/V46Qr8ypPD6lAoYfppb5ipnQaUf7rkWedXzw62pekoNx+avXA/6dj4FHvZpQ=="],
 
     "@sudobility/types": ["@sudobility/types@1.9.48", "", {}, "sha512-sCXkeICtA//ftTDHdlLEcojVpOJi/ocvOmUYGh0S0eTl/tG5HWbOP4cz5aJz8jue4c2vYe/cJxj6BwtRlAOLEA=="],
 
