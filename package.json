@@ -1,31 +1,28 @@
 {
   "name": "@sudobility/heavymath_lib",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Business logic library for Heavymath prediction market platform",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "build:watch": "tsc --watch",
+    "build": "bunx tsc -p tsconfig.build.json",
+    "build:watch": "bunx tsc --watch",
     "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\"",
-    "typecheck": "tsc --noEmit",
-    "typecheck:watch": "tsc --noEmit --watch",
-    "check-all": "npm run lint && npm run typecheck && npm run test:run",
-    "quick-check": "npm run lint && npm run typecheck",
-    "dev": "npm run build:watch"
+    "prepublishOnly": "bun run clean && bun run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "bunx eslint src --ext .ts,.tsx",
+    "lint:fix": "bunx eslint src --ext .ts,.tsx --fix",
+    "format": "bunx prettier --write src/**/*.ts",
+    "format:check": "bunx prettier --check src/**/*.ts",
+    "typecheck": "bunx tsc --noEmit"
   },
   "keywords": [
     "heavymath",
@@ -37,51 +34,42 @@
   ],
   "author": "John Huang",
   "license": "BUSL-1.1",
-  "devDependencies": {
-    "@sudobility/auctions_contracts": "^0.1.3",
+  "peerDependencies": {
+    "@sudobility/auctions_contracts": "^0.1.9",
     "@sudobility/heavymath_contracts": "^0.1.4",
     "@sudobility/heavymath_indexer_client": "^0.0.3",
-    "@sudobility/heavymath_types": "^0.0.2",
-    "@sudobility/sports_api_client": "^1.0.7",
+    "@sudobility/heavymath_types": "^0.0.6",
+    "@sudobility/sports_api_client": "^1.0.12",
+    "@sudobility/types": "^1.9.48",
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@sudobility/auctions_contracts": "^0.1.9",
+    "@sudobility/heavymath_contracts": "^0.1.4",
+    "@sudobility/heavymath_indexer_client": "^0.0.3",
+    "@sudobility/heavymath_types": "^0.0.6",
+    "@sudobility/sports_api_client": "^1.0.10",
+    "@sudobility/types": "^1.9.48",
     "@tanstack/react-query": "^5.90.5",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^24.9.1",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
-    "@vitest/coverage-v8": "^4.0.4",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "happy-dom": "^20.0.8",
+    "happy-dom": "^20.3.4",
     "prettier": "^3.6.2",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.3",
+    "react": "^19.2.1",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12",
-    "vitest": "^4.0.4",
-    "zustand": "^5.0.9"
-  },
-  "peerDependencies": {
-    "@sudobility/auctions_contracts": "^0.1.3",
-    "@sudobility/heavymath_contracts": "^0.1.4",
-    "@sudobility/heavymath_indexer_client": "^0.0.3",
-    "@sudobility/heavymath_types": "^0.0.2",
-    "@sudobility/sports_api_client": "^1.0.7",
-    "@tanstack/react-query": "^5.90.5",
-    "react": "^19.2.0"
+    "vitest": "^4.0.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/johnqh/heavymath_lib.git"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  },
-  "publishConfig": {
-    "access": "restricted"
   }
 }
