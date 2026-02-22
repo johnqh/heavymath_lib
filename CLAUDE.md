@@ -1,334 +1,283 @@
-# Claude Code Workflows for Heavymath Lib
-
-This guide helps you work efficiently with Claude Code on the @heavymath/lib project.
-
-## Quick Start
-
-### Essential Commands
-
-```bash
-bun run build         # Compile TypeScript to dist/
-bun run typecheck     # Type validation (no emit)
-bun test              # Run tests in watch mode
-bun run test:run      # Run tests once
-bun run lint          # Check for linting errors
-bun run lint:fix      # Auto-fix linting issues
-bun run format        # Format code with Prettier
-bun run check-all     # Run lint + typecheck + tests (use before commits)
-bun run quick-check   # Fast validation (lint + typecheck only)
-```
-
-### Validation Workflow
-
-Always run before committing:
-```bash
-bun run check-all     # Combines lint, typecheck, and test:run
-```
+# CLAUDE.md - @sudobility/heavymath_lib
 
 ## Project Overview
 
-### What is @heavymath/lib?
+`@sudobility/heavymath_lib` is a React hooks library that wraps sports data fetching hooks from `@sudobility/sports_api_client` and combines them with user favorites management from `@sudobility/heavymath_indexer_client`. Every hook fetches sports data from the API, fetches the user's favorites from the indexer, then merges them so each item has a `favorited: boolean` flag and a `setFavorited()` method.
 
-A business logic library for the Heavymath prediction market platform, providing:
+The library is platform-agnostic (works on both React web and React Native) and is part of the Heavymath prediction market ecosystem.
 
-- Platform-agnostic business logic (works on web and React Native)
-- React hooks for prediction market operations
-- Integration with @heavymath/indexer_client for API access
-- Type-safe interfaces and utilities
+**Package**: `@sudobility/heavymath_lib` (v0.0.10, BUSL-1.1 license)
+**Author**: John Huang
 
-### Key Principles
+## Quick Commands
 
-1. **Platform Abstraction**: Code MUST work on both web and React Native
-2. **Interface-First Design**: ALWAYS define interfaces before implementations
-3. **Business Logic Separation**: Pure domain logic separate from platform code
-4. **Comprehensive Testing**: All business logic MUST be tested
-5. **Type Safety**: Strict TypeScript with full type coverage
+```bash
+bun run build           # Compile TypeScript (uses tsconfig.build.json)
+bun run build:watch     # Compile with watch mode
+bun run clean           # Remove dist/
+bun run test            # Run tests once (vitest run)
+bun run test:watch      # Run tests in watch mode (vitest)
+bun run lint            # ESLint check on src/
+bun run lint:fix        # ESLint auto-fix
+bun run format          # Prettier format src/
+bun run format:check    # Prettier check src/
+bun run typecheck       # TypeScript type validation (no emit)
+bun run prepublishOnly  # Clean + build (runs automatically on publish)
+```
+
+**Before committing**, run at minimum:
+```bash
+bun run typecheck && bun run lint && bun run test
+```
 
 ## Project Structure
 
 ```
 heavymath_lib/
 ├── src/
-│   ├── index.ts              # Main exports
-│   ├── business/             # Core business logic (to be added)
-│   │   ├── core/            # Domain operations
-│   │   │   ├── market/      # Market business logic
-│   │   │   ├── prediction/  # Prediction/betting logic
-│   │   │   └── dealer/      # Dealer operations
-│   │   ├── hooks/           # React hooks
-│   │   │   ├── useMarket.ts
-│   │   │   ├── usePredictions.ts
-│   │   │   └── useDealer.ts
-│   │   └── context/         # React contexts
-│   ├── types/               # TypeScript definitions (to be added)
-│   │   ├── market.ts
-│   │   ├── prediction.ts
-│   │   └── dealer.ts
-│   ├── utils/               # Utility functions (to be added)
-│   │   ├── formatting.ts
-│   │   ├── validation.ts
-│   │   └── calculations.ts
-│   ├── test/
-│   │   └── setup.ts         # Test configuration
-│   └── __tests__/
-│       └── index.test.ts    # Smoke tests
+│   ├── index.ts                          # Root exports (re-exports ./hooks)
+│   ├── hooks/
+│   │   ├── index.ts                      # Re-exports ./sports
+│   │   └── sports/
+│   │       ├── index.ts                  # Re-exports all 9 sport modules
+│   │       ├── football/
+│   │       │   ├── index.ts
+│   │       │   ├── useFootballLeagues.ts
+│   │       │   ├── useFootballTeams.ts
+│   │       │   ├── useFootballMatches.ts
+│   │       │   └── __tests__/            # Tests for all 3 football hooks
+│   │       ├── basketball/               # useBasketballLeagues, Teams, Games
+│   │       ├── nfl/                      # useNflLeagues, Teams, Games
+│   │       ├── baseball/                 # useBaseballLeagues, Teams, Games
+│   │       ├── hockey/                   # useHockeyLeagues, Teams, Games
+│   │       ├── rugby/                    # useRugbyLeagues, Teams, Games
+│   │       ├── handball/                 # useHandballLeagues, Teams, Games
+│   │       ├── volleyball/               # useVolleyballLeagues, Teams, Games
+│   │       └── mma/                      # useMmaCategories, Fighters, Fights
+│   ├── __tests__/
+│   │   └── index.test.ts                # Smoke tests for root exports
+│   └── test/
+│       └── setup.ts                      # Vitest setup (global afterEach cleanup)
 ├── package.json
-├── tsconfig.json            # TypeScript config (strict mode)
-├── tsconfig.build.json      # Build-specific config
-├── eslint.config.js         # ESLint flat config
-├── vitest.config.ts         # Test configuration
-├── .prettierrc              # Code formatting
+├── tsconfig.json                         # Full strict TS config (ES2020, bundler resolution)
+├── tsconfig.build.json                   # Extends tsconfig.json, excludes tests
+├── eslint.config.js                      # ESLint flat config with TS + Prettier + react-hooks
+├── vitest.config.ts                      # Vitest with happy-dom, coverage thresholds at 70%
+├── .prettierrc                           # Single quotes, trailing commas, 80 width, 2-space indent
 └── .gitignore
 ```
 
-### Navigation Tips
+## The Core Pattern: Sports Hook + Favorites
 
-- **Adding business logic**: Start in `src/business/core/`
-- **Adding React hooks**: Create in `src/business/hooks/`
-- **Adding types**: Define in `src/types/`
-- **Adding utilities**: Add to `src/utils/`
-- **Writing tests**: Add to `src/__tests__/` or alongside source files
+Every hook in this library follows the same pattern. Understanding one means understanding all of them.
 
-## Common Workflows
+### How It Works
 
-### 1. Adding a New Business Operation
+1. **Fetch sports data** using a hook from `@sudobility/sports_api_client` (e.g., `useFootballLeagues`)
+2. **Fetch user favorites** using `useFavorites` from `@sudobility/heavymath_indexer_client`, filtered by category/subcategory/type
+3. **Build a `Set` of favorited IDs** from the favorites response for O(1) lookup
+4. **Merge** the sports data with a `favorited: boolean` field on each item
+5. **Expose `setFavorited(id, bool)`** that calls `addFavorite.mutateAsync()` or `removeFavorite.mutateAsync()`
 
-**Steps:**
-1. Define TypeScript interface in `src/types/`
-2. Implement business logic in `src/business/core/`
-3. Create React hook in `src/business/hooks/`
-4. Export from `src/index.ts`
-5. Write tests
+### Signature Pattern
 
-**Pattern:**
 ```typescript
-// 1. Define interface (src/types/market.ts)
-export interface MarketOperations {
-  getActiveMarkets(): Promise<Market[]>;
-  getMarketById(id: string): Promise<Market>;
-}
+function useXxxYyy(
+  indexerClient: IndexerClient,           // For favorites API calls
+  walletAddress: string | undefined,      // User's wallet (undefined = no favorites)
+  options?: UseXxxYyyOptions              // { params?, enabled? }
+): UseXxxYyyResult
+```
 
-// 2. Implement business logic (src/business/core/market/market-operations.ts)
-export class MarketOperationsImpl implements MarketOperations {
-  constructor(private client: IndexerClient) {}
+### Return Type Pattern
 
-  async getActiveMarkets(): Promise<Market[]> {
-    const response = await this.client.getMarkets({ status: 'Active' });
-    return response.data;
-  }
-
-  async getMarketById(id: string): Promise<Market> {
-    const response = await this.client.getMarket(id);
-    if (!response.data) throw new Error('Market not found');
-    return response.data;
-  }
-}
-
-// 3. Create hook (src/business/hooks/useMarket.ts)
-export function useMarket(marketId: string) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [market, setMarket] = useState<Market | null>(null);
-
-  // ... implementation
-  return { market, loading, error };
+```typescript
+interface UseXxxYyyResult {
+  items: XxxYyyWithFavorite[];     // Data with favorited flag
+  isLoading: boolean;              // True if EITHER query is loading
+  isError: boolean;                // Error from sports data query
+  error: Error | null;             // Error from sports data query
+  setFavorited: (id: number, favorited: boolean) => Promise<void>;
+  favoritesLoading: boolean;       // Loading state of favorites specifically
+  addFavoritePending: boolean;     // Mutation in progress
+  removeFavoritePending: boolean;  // Mutation in progress
 }
 ```
 
-### 2. Adding a New Hook
+### Favorites Category Scheme
 
-**Pattern:**
-```typescript
-import { useCallback, useState } from 'react';
+Favorites are stored with a three-level key: `category` / `subcategory` / `type`.
 
-export function useFeature(config: FeatureConfig) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<FeatureData | null>(null);
+| Sport      | subcategory   | Types                          |
+|------------|---------------|--------------------------------|
+| Football   | `football`    | `league`, `team`, `match`      |
+| Basketball | `basketball`  | `league`, `team`, `game`       |
+| NFL        | `nfl`         | `league`, `team`, `game`       |
+| Baseball   | `baseball`    | `league`, `team`, `game`       |
+| Hockey     | `hockey`      | `league`, `team`, `game`       |
+| Rugby      | `rugby`       | `league`, `team`, `game`       |
+| Handball   | `handball`    | `league`, `team`, `game`       |
+| Volleyball | `volleyball`  | `league`, `team`, `game`       |
+| MMA        | `mma`         | `category`, `fighter`, `fight` |
 
-  const execute = useCallback(async (param: string) => {
-    setIsLoading(true);
-    setError(null);
+All use `category = 'sports'`.
 
-    try {
-      const result = await performOperation(param);
-      setData(result);
-      return result;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Operation failed';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [config]);
+## Available Hooks by Sport
 
-  return { execute, data, isLoading, error, clearError: () => setError(null) };
-}
-```
+### Standard team sports (Football, Basketball, NFL, Baseball, Hockey, Rugby, Handball, Volleyball)
 
-### 3. Adding Utility Functions
+Each has three hooks following the pattern `use{Sport}{Entity}`:
+- **Leagues**: `useFootballLeagues`, `useBasketballLeagues`, `useNflLeagues`, etc.
+- **Teams**: `useFootballTeams`, `useBasketballTeams`, `useNflTeams`, etc.
+- **Games/Matches**: `useFootballMatches`, `useBasketballGames`, `useNflGames`, etc.
 
-**Pattern:**
-```typescript
-// src/utils/formatting.ts
+Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sports use "Games".
 
-/**
- * Format odds for display
- * @param odds - Raw odds value
- * @returns Formatted odds string
- */
-export function formatOdds(odds: number): string {
-  return `${(odds * 100).toFixed(1)}%`;
-}
+### MMA (different entity structure)
 
-/**
- * Calculate potential payout
- * @param amount - Bet amount
- * @param odds - Current odds
- * @returns Potential payout
- */
-export function calculatePayout(amount: bigint, odds: number): bigint {
-  return BigInt(Math.floor(Number(amount) / odds));
-}
-```
-
-## Code Patterns
-
-### Error Handling
-```typescript
-try {
-  const result = await apiCall();
-  return result;
-} catch (err) {
-  const errorMessage = err instanceof Error
-    ? err.message
-    : 'Operation failed';
-  setError(errorMessage);
-  throw err;
-}
-```
-
-### Type Safety
-```typescript
-// Always use explicit types
-interface MarketData {
-  id: string;
-  title: string;
-  status: MarketStatus;
-  odds: number;
-}
-
-// Use type guards for runtime checks
-function isMarket(obj: unknown): obj is MarketData {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    'id' in obj &&
-    'title' in obj
-  );
-}
-```
-
-### BigInt Handling
-```typescript
-// Convert BigInt for display
-function formatAmount(amount: string): string {
-  const value = BigInt(amount);
-  return (Number(value) / 1e18).toFixed(4);
-}
-
-// Parse user input to BigInt
-function parseAmount(input: string): string {
-  const value = parseFloat(input);
-  return (BigInt(Math.floor(value * 1e18))).toString();
-}
-```
+- `useMmaCategories` - Weight classes (returns strings, not objects)
+- `useMmaFighters` - Individual fighters
+- `useMmaFights` - Fight events
 
 ## Testing
 
-### Running Tests
-```bash
-bun test              # Watch mode
-bun run test:run      # Single run
-bun run test:coverage # With coverage
-```
+### Setup
+
+- **Framework**: Vitest 4 with happy-dom environment
+- **React Testing**: `@testing-library/react` with `renderHook` and `act`
+- **Coverage**: v8 provider, 70% threshold for branches/functions/lines/statements
+- **Mocking**: `vi.mock()` for both `@sudobility/sports_api_client` and `@sudobility/heavymath_indexer_client`
+
+### Current Test Coverage
+
+Tests exist for football hooks only (`src/hooks/sports/football/__tests__/`):
+- `useFootballLeagues.test.ts` (10 tests)
+- `useFootballTeams.test.ts` (10 tests)
+- `useFootballMatches.test.ts`
+
+Plus smoke tests in `src/__tests__/index.test.ts` (3 tests for VERSION and placeholder exports).
+
+Other sports do NOT have tests yet.
 
 ### Test Pattern
+
+Every hook test follows this structure:
+
 ```typescript
-import { describe, it, expect, vi } from 'vitest';
-import { MarketOperations } from '../business/core/market';
+// 1. Mock both dependencies before imports
+vi.mock('@sudobility/sports_api_client', () => ({ useXxx: vi.fn() }));
+vi.mock('@sudobility/heavymath_indexer_client', () => ({ useFavorites: vi.fn() }));
 
-describe('MarketOperations', () => {
-  it('should fetch active markets', async () => {
-    const mockClient = {
-      getMarkets: vi.fn().mockResolvedValue({
-        data: [{ id: '1', title: 'Test Market' }],
-      }),
-    };
+// 2. Import the mocked functions
+import { useXxx } from '@sudobility/sports_api_client';
+import { useFavorites } from '@sudobility/heavymath_indexer_client';
 
-    const operations = new MarketOperations(mockClient);
-    const result = await operations.getActiveMarkets();
+// 3. Create QueryClientProvider wrapper
+const createWrapper = () => {
+  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return ({ children }) => createElement(QueryClientProvider, { client: queryClient }, children);
+};
 
-    expect(result).toHaveLength(1);
-    expect(mockClient.getMarkets).toHaveBeenCalledWith({ status: 'Active' });
-  });
-});
+// 4. Set up default mocks in beforeEach, test rendering with renderHook + wrapper
+```
+
+### Running Tests
+
+```bash
+bun run test              # Single run
+bun run test:watch        # Watch mode
 ```
 
 ## Dependencies
 
-### Peer Dependencies
-- `@heavymath/indexer_client` - API client for indexer
-- `@tanstack/react-query` - Data fetching and caching
-- `react` - React framework
+### Peer Dependencies (must be provided by the consuming app)
 
-### Dev Dependencies
-- TypeScript, ESLint, Prettier, Vitest
+| Package | Purpose |
+|---------|---------|
+| `@sudobility/sports_api_client` | Sports data fetching hooks (the raw API layer) |
+| `@sudobility/heavymath_indexer_client` | `useFavorites`, `IndexerClient`, `WalletFavoriteData` |
+| `@sudobility/heavymath_contracts` | Smart contract interactions |
+| `@sudobility/heavymath_types` | Shared type definitions |
+| `@sudobility/auctions_contracts` | Auction contract interactions |
+| `@sudobility/types` | Core shared types |
+| `@tanstack/react-query` | >=5.0.0 - Data fetching/caching layer |
+| `react` | >=18.0.0 |
 
-## Related Projects
+### Key Dev Dependencies
 
-- **@heavymath/indexer_client** (`../heavymath_indexer_client`) - API client
-- **heavymath_indexer** (`../heavymath_indexer`) - Backend indexer service
+- TypeScript 5.9, Vitest 4, ESLint 9 (flat config), Prettier 3
+- `@testing-library/react` for hook testing
+- `happy-dom` as test DOM environment
 
-## Best Practices
+## Code Patterns and Conventions
 
-### Do's
-- Define interfaces before implementations
-- Write tests for all business logic
-- Use strict TypeScript types
-- Keep business logic platform-agnostic
-- Export from index.ts
-- Run `bun run check-all` before committing
+### TypeScript
 
-### Don'ts
-- Don't import platform-specific modules (React Native, web APIs) in business logic
-- Don't use `any` type without justification
-- Don't skip error handling
-- Don't hardcode configuration values
-- Don't mix UI concerns with business logic
+- Strict mode with all strict flags enabled
+- `noUnusedLocals` and `noUnusedParameters` enforced
+- Prefix unused variables/params with `_` (enforced by ESLint rule)
+- Target ES2020, module ESNext, bundler resolution
+- JSX mode: `react`
 
-## Quick Reference
+### ESLint
 
-### Type Conventions
-- IDs: Chain-prefixed strings (`"1-market-123"`)
-- Addresses: Lowercase hex strings (`"0xabc..."`)
-- BigInt values: Stored as strings (`"1000000000000000000"`)
-- Dates: ISO 8601 strings (`"2024-01-15T12:00:00Z"`)
+- Flat config format (eslint.config.js)
+- TypeScript + Prettier + react-hooks plugins
+- `react-hooks/exhaustive-deps`: warn
+- `@typescript-eslint/no-explicit-any`: off (allowed)
+- `prefer-const`, `no-var`, `object-shorthand`, `prefer-template`: error
+- Test files have relaxed rules (any allowed, console allowed)
+- Test files are excluded from lint entirely via ignores
 
-### Common Imports
-```typescript
-// From indexer client
-import type { Market, Prediction, DealerNFT } from '@heavymath/indexer_client';
-import { IndexerClient, useMarkets } from '@heavymath/indexer_client';
+### Prettier
 
-// From React Query
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+- Single quotes, semicolons, trailing commas (es5)
+- 80 character line width, 2-space indent
+- Arrow parens: avoid (`x => x` not `(x) => x`)
+- LF line endings
 
-// From React
-import { useState, useCallback, useMemo, useEffect } from 'react';
+### File Organization
+
+- Each sport is a directory under `src/hooks/sports/`
+- Each sport directory has an `index.ts` that re-exports its hooks
+- Tests go in `__tests__/` subdirectory within the sport directory
+- Interface types are co-located with the hook that uses them (not in a separate types/ directory)
+
+### Naming Conventions
+
+- Hook files: `use{Sport}{Entity}.ts` (e.g., `useFootballLeagues.ts`)
+- WithFavorite types: `{Sport}{Entity}WithFavorite` (e.g., `FootballLeagueWithFavorite`)
+- Options types: `Use{Sport}{Entity}Options`
+- Result types: `Use{Sport}{Entity}Result`
+- Favorites constants: `FAVORITES_CATEGORY`, `FAVORITES_SUBCATEGORY`, `FAVORITES_TYPE` (file-level const)
+
+## Adding a New Sport
+
+1. Create `src/hooks/sports/{sport}/` directory
+2. Create hook files following the existing pattern (leagues, teams, games/matches)
+3. Create `index.ts` re-exporting all hooks
+4. Add `export * from './{sport}';` to `src/hooks/sports/index.ts`
+5. Add tests in `__tests__/` subdirectory
+6. Run `bun run typecheck && bun run lint && bun run test`
+
+## Common Pitfalls
+
+- **No `check-all` or `quick-check` scripts exist.** Run `typecheck`, `lint`, and `test` separately.
+- **No `test:run` script.** The `test` script already does `vitest run` (single run). Use `test:watch` for watch mode.
+- **No `test:coverage` script.** Run `bunx vitest run --coverage` directly.
+- **Football uses "Matches" wrapping "Fixtures"** from the API. The hook is `useFootballMatches` but internally calls `useFootballFixtures` from the API client.
+- **MMA has different entity names** than other sports: categories (not leagues), fighters (not teams), fights (not games).
+- **Favorites ID conversion**: Sports API returns numeric IDs, but favorites stores string IDs. All hooks do `String(numericId)` when comparing or storing.
+- **`isLoading` combines both queries**: A hook reports `isLoading: true` when either the sports data OR the favorites are still loading.
+- **Error state only reflects sports data**: `isError` and `error` come from the sports API query, not from the favorites query.
+- **Build uses `tsconfig.build.json`**, not `tsconfig.json`. The build config extends the base but excludes test files and `__tests__/` directories.
+- **No CI/CD workflows** exist (no `.github/workflows/` directory).
+
+## Build and Publish
+
+```bash
+bun run clean && bun run build    # Manual build
+bun publish                       # Runs prepublishOnly automatically (clean + build)
 ```
 
----
-
-**Remember**: Always run `bun run check-all` before committing!
+Output goes to `dist/` with `.js`, `.d.ts`, and `.d.ts.map` files. Only `dist/**/*` is included in the published package. Access is restricted (`publishConfig.access: "restricted"`).

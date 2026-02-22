@@ -11,3 +11,4 @@ export * from './rugby';
 export * from './mma';
 export * from './handball';
 export * from './volleyball';
+export * from './f1';
