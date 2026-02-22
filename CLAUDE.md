@@ -7,22 +7,22 @@ This guide helps you work efficiently with Claude Code on the @heavymath/lib pro
 ### Essential Commands
 
 ```bash
-npm run build         # Compile TypeScript to dist/
-npm run typecheck     # Type validation (no emit)
-npm test              # Run tests in watch mode
-npm run test:run      # Run tests once
-npm run lint          # Check for linting errors
-npm run lint:fix      # Auto-fix linting issues
-npm run format        # Format code with Prettier
-npm run check-all     # Run lint + typecheck + tests (use before commits)
-npm run quick-check   # Fast validation (lint + typecheck only)
+bun run build         # Compile TypeScript to dist/
+bun run typecheck     # Type validation (no emit)
+bun test              # Run tests in watch mode
+bun run test:run      # Run tests once
+bun run lint          # Check for linting errors
+bun run lint:fix      # Auto-fix linting issues
+bun run format        # Format code with Prettier
+bun run check-all     # Run lint + typecheck + tests (use before commits)
+bun run quick-check   # Fast validation (lint + typecheck only)
 ```
 
 ### Validation Workflow
 
 Always run before committing:
 ```bash
-npm run check-all     # Combines lint, typecheck, and test:run
+bun run check-all     # Combines lint, typecheck, and test:run
 ```
 
 ## Project Overview
@@ -249,9 +249,9 @@ function parseAmount(input: string): string {
 
 ### Running Tests
 ```bash
-npm test              # Watch mode
-npm run test:run      # Single run
-npm run test:coverage # With coverage
+bun test              # Watch mode
+bun run test:run      # Single run
+bun run test:coverage # With coverage
 ```
 
 ### Test Pattern
@@ -299,7 +299,7 @@ describe('MarketOperations', () => {
 - Use strict TypeScript types
 - Keep business logic platform-agnostic
 - Export from index.ts
-- Run `npm run check-all` before committing
+- Run `bun run check-all` before committing
 
 ### Don'ts
 - Don't import platform-specific modules (React Native, web APIs) in business logic
@@ -331,4 +331,4 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 
 ---
 
-**Remember**: Always run `npm run check-all` before committing!
+**Remember**: Always run `bun run check-all` before committing!
