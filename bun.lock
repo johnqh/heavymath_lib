@@ -8,8 +8,8 @@
         "@sudobility/auctions_contracts": "^0.1.12",
         "@sudobility/heavymath_contracts": "^0.1.14",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
-        "@sudobility/heavymath_types": "^0.0.8",
-        "@sudobility/sports_api_client": "^1.0.19",
+        "@sudobility/heavymath_types": "^0.0.9",
+        "@sudobility/sports_api_client": "^1.0.20",
         "@sudobility/types": "^1.9.54",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/react": "^16.3.2",
@@ -31,8 +31,8 @@
         "@sudobility/auctions_contracts": "^0.1.12",
         "@sudobility/heavymath_contracts": "^0.1.14",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
-        "@sudobility/heavymath_types": "^0.0.8",
-        "@sudobility/sports_api_client": "^1.0.19",
+        "@sudobility/heavymath_types": "^0.0.9",
+        "@sudobility/sports_api_client": "^1.0.20",
         "@sudobility/types": "^1.9.54",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
@@ -228,9 +228,9 @@
 
     "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.3", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.1", "@sudobility/types": "^1.9.31", "@tanstack/react-query": "^5.90.5", "react": "^19.2.0", "zustand": "^5.0.0" } }, "sha512-KI/079wAvnN9k84mfuGZdGTkwxN8iCySLNPTqEFxzrc50u04ltc5vCzaiafPufp3EMhzU2TQHBYrexnW1fV52w=="],
 
-    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.8", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-+wo9qN0e3xTWhOq4U7QHYY+bkUyOqx87OdW98KZKKeMx+hdNPJiLcnlyYddQo5vvQZSLP3UdpJZcHoB7LZ0ojQ=="],
+    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.9", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-iJasGCiBORLypqzSD/3a3dApIpzSHJxqx8u3xpNlCO29lAMfjlDP487AEbbSXSoofdKuZZ2Qn4qzX00kkTEdKA=="],
 
-    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.19", "", { "peerDependencies": { "@sudobility/di": "^1.5.39", "@sudobility/types": "^1.9.54", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-VH6j2OUnYrIhQj5hYWjxziZFPkUh3ZteBdHxJYNn6tQ/OAXiO1kDr07Syd6aop4N2GoLxbccY7qaEg2Cs8Lx5g=="],
+    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.20", "", { "peerDependencies": { "@sudobility/di": "^1.5.40", "@sudobility/types": "^1.9.54", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-RBlwVgShmpWJ6wnliTNwpVofjLjIKFJGqom7Ujt9XNQUgIb3i0mCzIkRBIZ1TmRY3R+ArGnQorEenFUr0Yn2JA=="],
 
     "@sudobility/types": ["@sudobility/types@1.9.54", "", {}, "sha512-A2Kxr639D8NqPbudeARhp1cbKlE6YBf7NKaU8Gh1XwajgV9sqTBMEB+IfFpifU/tKg1JFEj/t5qmPPK4VzdZaw=="],
 
