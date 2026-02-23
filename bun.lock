@@ -9,8 +9,8 @@
         "@sudobility/heavymath_contracts": "^0.1.14",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
         "@sudobility/heavymath_types": "^0.0.8",
-        "@sudobility/sports_api_client": "^1.0.17",
-        "@sudobility/types": "^1.9.52",
+        "@sudobility/sports_api_client": "^1.0.18",
+        "@sudobility/types": "^1.9.53",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/react": "^16.3.2",
         "@types/node": "^24.9.1",
@@ -32,8 +32,8 @@
         "@sudobility/heavymath_contracts": "^0.1.14",
         "@sudobility/heavymath_indexer_client": "^0.0.3",
         "@sudobility/heavymath_types": "^0.0.8",
-        "@sudobility/sports_api_client": "^1.0.17",
-        "@sudobility/types": "^1.9.52",
+        "@sudobility/sports_api_client": "^1.0.18",
+        "@sudobility/types": "^1.9.53",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
       },
@@ -230,9 +230,9 @@
 
     "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.8", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-+wo9qN0e3xTWhOq4U7QHYY+bkUyOqx87OdW98KZKKeMx+hdNPJiLcnlyYddQo5vvQZSLP3UdpJZcHoB7LZ0ojQ=="],
 
-    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.17", "", { "peerDependencies": { "@sudobility/di": "^1.5.37", "@sudobility/types": "^1.9.52", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-GVo7XT/6yQWSjgljbcuAg6605Bxt+rAuAj9LXgv8st8KpXHs6JS5g23GvXuiARW2O8i8j6w4mjiP2xIEB0yHdA=="],
+    "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.18", "", { "peerDependencies": { "@sudobility/di": "^1.5.38", "@sudobility/types": "^1.9.53", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-viYLyr+nhWY6lqltbG6+cLpPjgBOoqbZtKCcmx6IJ30qWypBXdLeb6eE0M3vZFLG+xl/e+Ilzh5Iz9e8J6ukRg=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.52", "", {}, "sha512-+XE4KoltuhPsDiMlTC8P3PDSaHX7SmrtRydXBqzL4vlaxczIEI6SEZSFIXMTNjiLkwjsze4HoD9U5RJFhAfjuw=="],
+    "@sudobility/types": ["@sudobility/types@1.9.53", "", {}, "sha512-h86H+thP+Fm4pZKR0ggSR0Ne1vRbUOmusXJI+IRGtj0MmYtIuWtqcDN++kJJ2K6QFNa+/gs84mvbsgbJ+D491A=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.90.19", "", {}, "sha512-GLW5sjPVIvH491VV1ufddnfldyVB+teCnpPIvweEfkpRx7CfUmUGhoh9cdcUKBh/KwVxk22aNEDxeTsvmyB/WA=="],
 
