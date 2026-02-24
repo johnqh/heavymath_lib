@@ -1,5 +1,6 @@
 /**
  * Hook for hockey leagues with favorites support
+ * Combines useHockeyLeagues from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'hockey';
 const FAVORITES_TYPE = 'league';
 
+/**
+ * Hockey league with favorite status
+ */
 export interface HockeyLeagueWithFavorite extends HockeyLeagueResponse {
+  /** Whether the current user has favorited this league */
   favorited: boolean;
 }
 
+/**
+ * Options for useHockeyLeagues hook
+ */
 export interface UseHockeyLeaguesOptions {
+  /** Optional filter parameters for the hockey leagues query */
   params?: HockeyLeaguesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useHockeyLeagues hook
+ */
 export interface UseHockeyLeaguesResult {
+  /** Array of hockey leagues with favorited flag */
   leagues: HockeyLeagueWithFavorite[];
+  /** True if either the leagues or favorites query is loading */
   isLoading: boolean;
+  /** True if the leagues query encountered an error */
   isError: boolean;
+  /** Error from the leagues query, or null */
   error: Error | null;
+  /** Toggle favorite status for a league by its ID */
   setFavorited: (leagueId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch hockey leagues with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with league data including favorite status
+ */
 export function useHockeyLeagues(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

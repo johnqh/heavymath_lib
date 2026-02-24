@@ -23,6 +23,7 @@ const FAVORITES_TYPE = 'league';
  * Football league with favorite status
  */
 export interface FootballLeagueWithFavorite extends FootballLeagueResponse {
+  /** Whether the current user has favorited this league */
   favorited: boolean;
 }
 
@@ -30,7 +31,9 @@ export interface FootballLeagueWithFavorite extends FootballLeagueResponse {
  * Options for useFootballLeagues hook
  */
 export interface UseFootballLeaguesOptions {
+  /** Optional filter parameters for the football leagues query */
   params?: FootballLeaguesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
@@ -38,13 +41,21 @@ export interface UseFootballLeaguesOptions {
  * Return type for useFootballLeagues hook
  */
 export interface UseFootballLeaguesResult {
+  /** Array of football leagues with favorited flag */
   leagues: FootballLeagueWithFavorite[];
+  /** True if either the leagues or favorites query is loading */
   isLoading: boolean;
+  /** True if the leagues query encountered an error */
   isError: boolean;
+  /** Error from the leagues query, or null */
   error: Error | null;
+  /** Toggle favorite status for a league by its ID */
   setFavorited: (leagueId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 

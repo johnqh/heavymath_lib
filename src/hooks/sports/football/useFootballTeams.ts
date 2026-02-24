@@ -23,6 +23,7 @@ const FAVORITES_TYPE = 'team';
  * Football team with favorite status
  */
 export interface FootballTeamWithFavorite extends FootballTeamResponse {
+  /** Whether the current user has favorited this team */
   favorited: boolean;
 }
 
@@ -30,7 +31,9 @@ export interface FootballTeamWithFavorite extends FootballTeamResponse {
  * Options for useFootballTeams hook
  */
 export interface UseFootballTeamsOptions {
+  /** Required filter parameters for the football teams query (at least one filter required) */
   params: FootballTeamsParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
@@ -38,13 +41,21 @@ export interface UseFootballTeamsOptions {
  * Return type for useFootballTeams hook
  */
 export interface UseFootballTeamsResult {
+  /** Array of football teams with favorited flag */
   teams: FootballTeamWithFavorite[];
+  /** True if either the teams or favorites query is loading */
   isLoading: boolean;
+  /** True if the teams query encountered an error */
   isError: boolean;
+  /** Error from the teams query, or null */
   error: Error | null;
+  /** Toggle favorite status for a team by its ID */
   setFavorited: (teamId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 

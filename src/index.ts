@@ -1,34 +1,20 @@
 /**
- * @heavymath/lib - Business logic library for Heavymath prediction market platform
+ * @sudobility/heavymath_lib - Business logic library for Heavymath prediction market platform
  *
- * This library provides platform-agnostic business logic for the Heavymath ecosystem.
- * It is designed to work with both React web and React Native applications.
+ * This library provides platform-agnostic React hooks that combine sports data
+ * from `@sudobility/sports_api_client` with user favorites management from
+ * `@sudobility/heavymath_indexer_client`. Each hook fetches sports data, fetches
+ * the user's favorites, and merges them so every item has a `favorited` flag
+ * and a `setFavorited()` method.
  *
- * Architecture:
- * - business/   : Core business logic and React hooks
- * - types/      : TypeScript type definitions
- * - utils/      : Utility functions and helpers
+ * Works with both React web and React Native applications.
+ *
+ * @packageDocumentation
  */
 
 // ============================================================================
 // EXPORTS
 // ============================================================================
 
-// React hooks
+// React hooks for all sports with favorites support
 export * from './hooks';
-
-/**
- * Library version
- */
-export const VERSION = '0.0.1';
-
-/**
- * Placeholder export to ensure the module is valid
- * This will be replaced with actual exports as business logic is added
- */
-export const placeholder = {
-  name: '@heavymath/lib',
-  version: VERSION,
-  description:
-    'Business logic library for Heavymath prediction market platform',
-};

@@ -1,5 +1,6 @@
 /**
  * Hook for baseball games with favorites support
+ * Combines useBaseballGames from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'baseball';
 const FAVORITES_TYPE = 'game';
 
+/**
+ * Baseball game with favorite status
+ */
 export interface BaseballGameWithFavorite extends BaseballGame {
+  /** Whether the current user has favorited this game */
   favorited: boolean;
 }
 
+/**
+ * Options for useBaseballGames hook
+ */
 export interface UseBaseballGamesOptions {
+  /** Optional filter parameters for the baseball games query */
   params?: BaseballGamesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useBaseballGames hook
+ */
 export interface UseBaseballGamesResult {
+  /** Array of baseball games with favorited flag */
   games: BaseballGameWithFavorite[];
+  /** True if either the games or favorites query is loading */
   isLoading: boolean;
+  /** True if the games query encountered an error */
   isError: boolean;
+  /** Error from the games query, or null */
   error: Error | null;
+  /** Toggle favorite status for a game by its ID */
   setFavorited: (gameId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch baseball games with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with game data including favorite status
+ */
 export function useBaseballGames(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

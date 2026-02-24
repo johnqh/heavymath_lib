@@ -23,6 +23,7 @@ const FAVORITES_TYPE = 'match';
  * Football match (fixture) with favorite status
  */
 export interface FootballMatchWithFavorite extends FootballFixtureResponse {
+  /** Whether the current user has favorited this match */
   favorited: boolean;
 }
 
@@ -30,7 +31,9 @@ export interface FootballMatchWithFavorite extends FootballFixtureResponse {
  * Options for useFootballMatches hook
  */
 export interface UseFootballMatchesOptions {
+  /** Optional filter parameters for the football fixtures query */
   params?: FootballFixturesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
@@ -38,13 +41,21 @@ export interface UseFootballMatchesOptions {
  * Return type for useFootballMatches hook
  */
 export interface UseFootballMatchesResult {
+  /** Array of football matches (fixtures) with favorited flag */
   matches: FootballMatchWithFavorite[];
+  /** True if either the fixtures or favorites query is loading */
   isLoading: boolean;
+  /** True if the fixtures query encountered an error */
   isError: boolean;
+  /** Error from the fixtures query, or null */
   error: Error | null;
+  /** Toggle favorite status for a match by its fixture ID */
   setFavorited: (fixtureId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 

@@ -1,5 +1,6 @@
 /**
  * Hook for F1 drivers with favorites support
+ * Combines useF1Drivers from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'f1';
 const FAVORITES_TYPE = 'driver';
 
+/**
+ * F1 driver with favorite status
+ */
 export interface F1DriverWithFavorite extends F1Driver {
+  /** Whether the current user has favorited this driver */
   favorited: boolean;
 }
 
+/**
+ * Options for useF1Drivers hook
+ */
 export interface UseF1DriversOptions {
+  /** Optional filter parameters for the F1 drivers query */
   params?: F1DriversParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useF1Drivers hook
+ */
 export interface UseF1DriversResult {
+  /** Array of F1 drivers with favorited flag */
   drivers: F1DriverWithFavorite[];
+  /** True if either the drivers or favorites query is loading */
   isLoading: boolean;
+  /** True if the drivers query encountered an error */
   isError: boolean;
+  /** Error from the drivers query, or null */
   error: Error | null;
+  /** Toggle favorite status for a driver by their ID */
   setFavorited: (driverId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch F1 drivers with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with driver data including favorite status
+ */
 export function useF1Drivers(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

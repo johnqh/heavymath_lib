@@ -1,5 +1,6 @@
 /**
  * Hook for F1 teams with favorites support
+ * Combines useF1Teams from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'f1';
 const FAVORITES_TYPE = 'team';
 
+/**
+ * F1 team with favorite status
+ */
 export interface F1TeamWithFavorite extends F1Team {
+  /** Whether the current user has favorited this team */
   favorited: boolean;
 }
 
+/**
+ * Options for useF1Teams hook
+ */
 export interface UseF1TeamsOptions {
+  /** Optional filter parameters for the F1 teams query */
   params?: F1TeamsParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useF1Teams hook
+ */
 export interface UseF1TeamsResult {
+  /** Array of F1 teams with favorited flag */
   teams: F1TeamWithFavorite[];
+  /** True if either the teams or favorites query is loading */
   isLoading: boolean;
+  /** True if the teams query encountered an error */
   isError: boolean;
+  /** Error from the teams query, or null */
   error: Error | null;
+  /** Toggle favorite status for a team by its ID */
   setFavorited: (teamId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch F1 teams with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with team data including favorite status
+ */
 export function useF1Teams(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

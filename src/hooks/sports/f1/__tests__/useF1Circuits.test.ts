@@ -1,0 +1,21 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createElement } from 'react';
+import { useF1Circuits } from '../useF1Circuits';
+vi.mock('@sudobility/sports_api_client', () => ({ useF1Circuits: vi.fn() }));
+vi.mock('@sudobility/heavymath_indexer_client', () => ({ useFavorites: vi.fn() }));
+import { useF1Circuits as useApi } from '@sudobility/sports_api_client';
+import { useFavorites } from '@sudobility/heavymath_indexer_client';
+const mockUseApi = vi.mocked(useApi); const mockUseFavorites = vi.mocked(useFavorites);
+const mockData = [{ id: 100, name: 'Circuit de Monaco' }, { id: 101, name: 'Silverstone' }];
+const mockFavs = [{ id: 1, itemId: '100', category: 'sports', subcategory: 'f1', type: 'circuit' }];
+const ic = {} as any; const wa = '0xabc';
+const cw = () => { const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } }); return ({ children }: { children: React.ReactNode }) => createElement(QueryClientProvider, { client: qc }, children); };
+describe('useF1Circuits', () => {
+  beforeEach(() => { vi.clearAllMocks(); mockUseApi.mockReturnValue({ data: { response: mockData, results: 2, paging: { current: 1, total: 1 } }, isLoading: false, isError: false, error: null } as any); mockUseFavorites.mockReturnValue({ favorites: mockFavs, isLoading: false, isError: false, error: null, addFavorite: { mutateAsync: vi.fn(), isPending: false }, removeFavorite: { mutateAsync: vi.fn(), isPending: false }, refresh: vi.fn() } as any); });
+  it('should return circuits with favorited flag', () => { const { result } = renderHook(() => useF1Circuits(ic, wa), { wrapper: cw() }); expect(result.current.circuits).toHaveLength(2); expect(result.current.circuits[0].favorited).toBe(true); expect(result.current.circuits[1].favorited).toBe(false); });
+  it('should call addFavorite', async () => { const m = vi.fn().mockResolvedValue({}); mockUseFavorites.mockReturnValue({ favorites: [], isLoading: false, isError: false, error: null, addFavorite: { mutateAsync: m, isPending: false }, removeFavorite: { mutateAsync: vi.fn(), isPending: false }, refresh: vi.fn() } as any); const { result } = renderHook(() => useF1Circuits(ic, wa), { wrapper: cw() }); await act(async () => { await result.current.setFavorited(100, true); }); expect(m).toHaveBeenCalledWith({ category: 'sports', subcategory: 'f1', type: 'circuit', id: '100' }); });
+  it('should pass correct filters', () => { renderHook(() => useF1Circuits(ic, wa), { wrapper: cw() }); expect(mockUseFavorites).toHaveBeenCalledWith(ic, wa, { category: 'sports', subcategory: 'f1', type: 'circuit' }); });
+  it('should return empty when undefined', () => { mockUseApi.mockReturnValue({ data: undefined, isLoading: false, isError: false, error: null } as any); const { result } = renderHook(() => useF1Circuits(ic, wa), { wrapper: cw() }); expect(result.current.circuits).toHaveLength(0); });
+});

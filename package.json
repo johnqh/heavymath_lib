@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_lib",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Business logic library for Heavymath prediction market platform",
   "type": "module",
   "main": "dist/index.js",
@@ -22,7 +22,8 @@
     "lint:fix": "bunx eslint src --ext .ts,.tsx --fix",
     "format": "bunx prettier --write src/**/*.ts",
     "format:check": "bunx prettier --check src/**/*.ts",
-    "typecheck": "bunx tsc --noEmit"
+    "typecheck": "bunx tsc --noEmit",
+    "verify": "bun run typecheck && bun run lint && bun run test"
   },
   "keywords": [
     "heavymath",

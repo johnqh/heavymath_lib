@@ -22,12 +22,13 @@ bun run lint:fix        # ESLint auto-fix
 bun run format          # Prettier format src/
 bun run format:check    # Prettier check src/
 bun run typecheck       # TypeScript type validation (no emit)
+bun run verify          # Run typecheck + lint + test (use before committing)
 bun run prepublishOnly  # Clean + build (runs automatically on publish)
 ```
 
-**Before committing**, run at minimum:
+**Before committing**, run:
 ```bash
-bun run typecheck && bun run lint && bun run test
+bun run verify
 ```
 
 ## Project Structure
@@ -39,7 +40,7 @@ heavymath_lib/
 │   ├── hooks/
 │   │   ├── index.ts                      # Re-exports ./sports
 │   │   └── sports/
-│   │       ├── index.ts                  # Re-exports all 9 sport modules
+│   │       ├── index.ts                  # Re-exports all 10 sport modules
 │   │       ├── football/
 │   │       │   ├── index.ts
 │   │       │   ├── useFootballLeagues.ts
@@ -53,7 +54,8 @@ heavymath_lib/
 │   │       ├── rugby/                    # useRugbyLeagues, Teams, Games
 │   │       ├── handball/                 # useHandballLeagues, Teams, Games
 │   │       ├── volleyball/               # useVolleyballLeagues, Teams, Games
-│   │       └── mma/                      # useMmaCategories, Fighters, Fights
+│   │       ├── mma/                      # useMmaCategories, Fighters, Fights
+│   │       └── f1/                       # useF1Drivers, Teams, Races, Circuits
 │   ├── __tests__/
 │   │   └── index.test.ts                # Smoke tests for root exports
 │   └── test/
@@ -119,6 +121,7 @@ Favorites are stored with a three-level key: `category` / `subcategory` / `type`
 | Handball   | `handball`    | `league`, `team`, `game`       |
 | Volleyball | `volleyball`  | `league`, `team`, `game`       |
 | MMA        | `mma`         | `category`, `fighter`, `fight` |
+| F1         | `f1`          | `driver`, `team`, `race`, `circuit` |
 
 All use `category = 'sports'`.
 
@@ -139,6 +142,13 @@ Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sp
 - `useMmaFighters` - Individual fighters
 - `useMmaFights` - Fight events
 
+### F1 (four entity types)
+
+- `useF1Drivers` - F1 drivers
+- `useF1Teams` - F1 teams/constructors
+- `useF1Races` - F1 race events
+- `useF1Circuits` - F1 circuits/tracks
+
 ## Testing
 
 ### Setup
@@ -150,14 +160,20 @@ Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sp
 
 ### Current Test Coverage
 
-Tests exist for football hooks only (`src/hooks/sports/football/__tests__/`):
-- `useFootballLeagues.test.ts` (10 tests)
-- `useFootballTeams.test.ts` (10 tests)
-- `useFootballMatches.test.ts`
+All 10 sports have full test coverage (32 test files, 187 tests total):
 
-Plus smoke tests in `src/__tests__/index.test.ts` (3 tests for VERSION and placeholder exports).
+- **Football**: `useFootballLeagues.test.ts`, `useFootballTeams.test.ts`, `useFootballMatches.test.ts`
+- **Basketball**: `useBasketballLeagues.test.ts`, `useBasketballTeams.test.ts`, `useBasketballGames.test.ts`
+- **NFL**: `useNflLeagues.test.ts`, `useNflTeams.test.ts`, `useNflGames.test.ts`
+- **Baseball**: `useBaseballLeagues.test.ts`, `useBaseballTeams.test.ts`, `useBaseballGames.test.ts`
+- **Hockey**: `useHockeyLeagues.test.ts`, `useHockeyTeams.test.ts`, `useHockeyGames.test.ts`
+- **Rugby**: `useRugbyLeagues.test.ts`, `useRugbyTeams.test.ts`, `useRugbyGames.test.ts`
+- **Handball**: `useHandballLeagues.test.ts`, `useHandballTeams.test.ts`, `useHandballGames.test.ts`
+- **Volleyball**: `useVolleyballLeagues.test.ts`, `useVolleyballTeams.test.ts`, `useVolleyballGames.test.ts`
+- **MMA**: `useMmaCategories.test.ts`, `useMmaFighters.test.ts`, `useMmaFights.test.ts`
+- **F1**: `useF1Drivers.test.ts`, `useF1Teams.test.ts`, `useF1Races.test.ts`, `useF1Circuits.test.ts`
 
-Other sports do NOT have tests yet.
+Plus smoke tests in `src/__tests__/index.test.ts` (10 tests verifying all hooks are properly exported).
 
 ### Test Pattern
 
@@ -258,15 +274,16 @@ bun run test:watch        # Watch mode
 3. Create `index.ts` re-exporting all hooks
 4. Add `export * from './{sport}';` to `src/hooks/sports/index.ts`
 5. Add tests in `__tests__/` subdirectory
-6. Run `bun run typecheck && bun run lint && bun run test`
+6. Run `bun run verify`
 
 ## Common Pitfalls
 
-- **No `check-all` or `quick-check` scripts exist.** Run `typecheck`, `lint`, and `test` separately.
+- **Use `bun run verify`** to run all checks (typecheck + lint + test) before committing.
 - **No `test:run` script.** The `test` script already does `vitest run` (single run). Use `test:watch` for watch mode.
 - **No `test:coverage` script.** Run `bunx vitest run --coverage` directly.
 - **Football uses "Matches" wrapping "Fixtures"** from the API. The hook is `useFootballMatches` but internally calls `useFootballFixtures` from the API client.
 - **MMA has different entity names** than other sports: categories (not leagues), fighters (not teams), fights (not games).
+- **F1 has four entity types** (drivers, teams, races, circuits) instead of the standard three.
 - **Favorites ID conversion**: Sports API returns numeric IDs, but favorites stores string IDs. All hooks do `String(numericId)` when comparing or storing.
 - **`isLoading` combines both queries**: A hook reports `isLoading: true` when either the sports data OR the favorites are still loading.
 - **Error state only reflects sports data**: `isError` and `error` come from the sports API query, not from the favorites query.

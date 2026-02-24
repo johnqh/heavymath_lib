@@ -1,5 +1,6 @@
 /**
  * Hook for MMA fights with favorites support
+ * Combines useMmaFights from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'mma';
 const FAVORITES_TYPE = 'fight';
 
+/**
+ * MMA fight with favorite status
+ */
 export interface MmaFightWithFavorite extends MmaFight {
+  /** Whether the current user has favorited this fight */
   favorited: boolean;
 }
 
+/**
+ * Options for useMmaFights hook
+ */
 export interface UseMmaFightsOptions {
+  /** Optional filter parameters for the MMA fights query */
   params?: MmaFightsParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useMmaFights hook
+ */
 export interface UseMmaFightsResult {
+  /** Array of MMA fights with favorited flag */
   fights: MmaFightWithFavorite[];
+  /** True if either the fights or favorites query is loading */
   isLoading: boolean;
+  /** True if the fights query encountered an error */
   isError: boolean;
+  /** Error from the fights query, or null */
   error: Error | null;
+  /** Toggle favorite status for a fight by its ID */
   setFavorited: (fightId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch MMA fights with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with fight data including favorite status
+ */
 export function useMmaFights(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

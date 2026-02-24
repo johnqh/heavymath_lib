@@ -1,6 +1,6 @@
 /**
  * Hook for MMA categories (weight classes) with favorites support
- * Note: MMA categories are returned as strings from the API
+ * Note: MMA categories are returned as strings from the API, not objects with numeric IDs
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,27 +18,58 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'mma';
 const FAVORITES_TYPE = 'category';
 
+/**
+ * MMA category (weight class) with favorite status
+ */
 export interface MmaCategoryWithFavorite {
+  /** Name of the MMA weight class category */
   name: string;
+  /** Whether the current user has favorited this category */
   favorited: boolean;
 }
 
+/**
+ * Options for useMmaCategories hook
+ */
 export interface UseMmaCategoriesOptions {
+  /** Optional filter parameters for the MMA categories query */
   params?: MmaCategoriesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useMmaCategories hook
+ */
 export interface UseMmaCategoriesResult {
+  /** Array of MMA categories with favorited flag */
   categories: MmaCategoryWithFavorite[];
+  /** True if either the categories or favorites query is loading */
   isLoading: boolean;
+  /** True if the categories query encountered an error */
   isError: boolean;
+  /** Error from the categories query, or null */
   error: Error | null;
+  /** Toggle favorite status for a category by its name (not numeric ID) */
   setFavorited: (categoryName: string, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch MMA categories (weight classes) with favorite status.
+ * Unlike other sports hooks, MMA categories use string names as identifiers
+ * rather than numeric IDs.
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with category data including favorite status
+ */
 export function useMmaCategories(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

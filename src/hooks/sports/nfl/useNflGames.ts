@@ -1,5 +1,6 @@
 /**
  * Hook for NFL games with favorites support
+ * Combines useNflGames from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'nfl';
 const FAVORITES_TYPE = 'game';
 
+/**
+ * NFL game with favorite status
+ */
 export interface NflGameWithFavorite extends NflGame {
+  /** Whether the current user has favorited this game */
   favorited: boolean;
 }
 
+/**
+ * Options for useNflGames hook
+ */
 export interface UseNflGamesOptions {
+  /** Optional filter parameters for the NFL games query */
   params?: NflGamesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useNflGames hook
+ */
 export interface UseNflGamesResult {
+  /** Array of NFL games with favorited flag */
   games: NflGameWithFavorite[];
+  /** True if either the games or favorites query is loading */
   isLoading: boolean;
+  /** True if the games query encountered an error */
   isError: boolean;
+  /** Error from the games query, or null */
   error: Error | null;
+  /** Toggle favorite status for a game by its ID */
   setFavorited: (gameId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch NFL games with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with game data including favorite status
+ */
 export function useNflGames(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

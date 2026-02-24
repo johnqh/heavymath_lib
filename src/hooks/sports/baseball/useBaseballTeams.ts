@@ -1,5 +1,6 @@
 /**
  * Hook for baseball teams with favorites support
+ * Combines useBaseballTeams from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'baseball';
 const FAVORITES_TYPE = 'team';
 
+/**
+ * Baseball team with favorite status
+ */
 export interface BaseballTeamWithFavorite extends BaseballTeamResponse {
+  /** Whether the current user has favorited this team */
   favorited: boolean;
 }
 
+/**
+ * Options for useBaseballTeams hook
+ */
 export interface UseBaseballTeamsOptions {
+  /** Optional filter parameters for the baseball teams query */
   params?: BaseballTeamsParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useBaseballTeams hook
+ */
 export interface UseBaseballTeamsResult {
+  /** Array of baseball teams with favorited flag */
   teams: BaseballTeamWithFavorite[];
+  /** True if either the teams or favorites query is loading */
   isLoading: boolean;
+  /** True if the teams query encountered an error */
   isError: boolean;
+  /** Error from the teams query, or null */
   error: Error | null;
+  /** Toggle favorite status for a team by its ID */
   setFavorited: (teamId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch baseball teams with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with team data including favorite status
+ */
 export function useBaseballTeams(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

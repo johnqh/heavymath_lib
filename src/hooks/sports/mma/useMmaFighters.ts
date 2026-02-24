@@ -1,5 +1,6 @@
 /**
  * Hook for MMA fighters with favorites support
+ * Combines useMmaFighters from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'mma';
 const FAVORITES_TYPE = 'fighter';
 
+/**
+ * MMA fighter with favorite status
+ */
 export interface MmaFighterWithFavorite extends MmaFighter {
+  /** Whether the current user has favorited this fighter */
   favorited: boolean;
 }
 
+/**
+ * Options for useMmaFighters hook
+ */
 export interface UseMmaFightersOptions {
+  /** Optional filter parameters for the MMA fighters query */
   params?: MmaFightersParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useMmaFighters hook
+ */
 export interface UseMmaFightersResult {
+  /** Array of MMA fighters with favorited flag */
   fighters: MmaFighterWithFavorite[];
+  /** True if either the fighters or favorites query is loading */
   isLoading: boolean;
+  /** True if the fighters query encountered an error */
   isError: boolean;
+  /** Error from the fighters query, or null */
   error: Error | null;
+  /** Toggle favorite status for a fighter by their ID */
   setFavorited: (fighterId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch MMA fighters with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with fighter data including favorite status
+ */
 export function useMmaFighters(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,

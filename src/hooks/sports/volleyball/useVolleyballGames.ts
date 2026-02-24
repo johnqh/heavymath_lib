@@ -1,5 +1,6 @@
 /**
  * Hook for volleyball games with favorites support
+ * Combines useVolleyballGames from sports_api_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
@@ -18,26 +19,54 @@ const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'volleyball';
 const FAVORITES_TYPE = 'game';
 
+/**
+ * Volleyball game with favorite status
+ */
 export interface VolleyballGameWithFavorite extends VolleyballGame {
+  /** Whether the current user has favorited this game */
   favorited: boolean;
 }
 
+/**
+ * Options for useVolleyballGames hook
+ */
 export interface UseVolleyballGamesOptions {
+  /** Optional filter parameters for the volleyball games query */
   params?: VolleyballGamesParams;
+  /** Whether the query should execute. Defaults to true */
   enabled?: boolean;
 }
 
+/**
+ * Return type for useVolleyballGames hook
+ */
 export interface UseVolleyballGamesResult {
+  /** Array of volleyball games with favorited flag */
   games: VolleyballGameWithFavorite[];
+  /** True if either the games or favorites query is loading */
   isLoading: boolean;
+  /** True if the games query encountered an error */
   isError: boolean;
+  /** Error from the games query, or null */
   error: Error | null;
+  /** Toggle favorite status for a game by its ID */
   setFavorited: (gameId: number, favorited: boolean) => Promise<void>;
+  /** True if the favorites query specifically is loading */
   favoritesLoading: boolean;
+  /** True if an addFavorite mutation is in progress */
   addFavoritePending: boolean;
+  /** True if a removeFavorite mutation is in progress */
   removeFavoritePending: boolean;
 }
 
+/**
+ * Hook to fetch volleyball games with favorite status
+ *
+ * @param indexerClient - IndexerClient instance for favorites operations
+ * @param walletAddress - User's wallet address for favorites (undefined = no favorites)
+ * @param options - Query options including optional filter params
+ * @returns Query result with game data including favorite status
+ */
 export function useVolleyballGames(
   indexerClient: IndexerClient,
   walletAddress: string | undefined,
