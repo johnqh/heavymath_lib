@@ -18,3 +18,6 @@
 
 // React hooks for all sports with favorites support
 export * from './hooks';
+
+// Market equilibrium calculation utilities
+export * from './market';

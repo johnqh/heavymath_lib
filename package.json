@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_lib",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Business logic library for Heavymath prediction market platform",
   "type": "module",
   "main": "dist/index.js",
