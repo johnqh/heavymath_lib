@@ -60,3 +60,6 @@ pnpm-lock.yaml
 # Quality reports
 .quality-report.json
 .performance-report.json
+
+# Claude Code local settings
+.claude/settings.local.json
