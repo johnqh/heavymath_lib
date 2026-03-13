@@ -4,16 +4,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createElement } from 'react';
 import { useBasketballLeagues } from '../useBasketballLeagues';
 
-vi.mock('@sudobility/sports_api_client', () => ({
+vi.mock('@sudobility/heavymath_indexer_client', () => ({
+  useFavorites: vi.fn(),
   useBasketballLeagues: vi.fn(),
 }));
 
-vi.mock('@sudobility/heavymath_indexer_client', () => ({
-  useFavorites: vi.fn(),
-}));
-
-import { useBasketballLeagues as useBasketballLeaguesApi } from '@sudobility/sports_api_client';
-import { useFavorites } from '@sudobility/heavymath_indexer_client';
+import {
+  useFavorites,
+  useBasketballLeagues as useBasketballLeaguesApi,
+} from '@sudobility/heavymath_indexer_client';
 
 const mockUseBasketballLeaguesApi = vi.mocked(useBasketballLeaguesApi);
 const mockUseFavorites = vi.mocked(useFavorites);
@@ -29,7 +28,13 @@ const mockLeagues = [
 ];
 
 const mockFavorites = [
-  { id: 1, itemId: '1', category: 'sports', subcategory: 'basketball', type: 'league' },
+  {
+    id: 1,
+    itemId: '1',
+    category: 'sports',
+    subcategory: 'basketball',
+    type: 'league',
+  },
 ];
 
 const mockIndexerClient = {} as any;
@@ -48,7 +53,11 @@ describe('useBasketballLeagues', () => {
     vi.clearAllMocks();
 
     mockUseBasketballLeaguesApi.mockReturnValue({
-      data: { response: mockLeagues, results: 2, paging: { current: 1, total: 1 } },
+      data: {
+        response: mockLeagues,
+        results: 2,
+        paging: { current: 1, total: 1 },
+      },
       isLoading: false,
       isError: false,
       error: null,
@@ -78,7 +87,10 @@ describe('useBasketballLeagues', () => {
 
   it('should return isLoading true when leagues are loading', () => {
     mockUseBasketballLeaguesApi.mockReturnValue({
-      data: undefined, isLoading: true, isError: false, error: null,
+      data: undefined,
+      isLoading: true,
+      isError: false,
+      error: null,
     } as any);
 
     const { result } = renderHook(
@@ -91,7 +103,10 @@ describe('useBasketballLeagues', () => {
 
   it('should return isLoading true when favorites are loading', () => {
     mockUseFavorites.mockReturnValue({
-      favorites: [], isLoading: true, isError: false, error: null,
+      favorites: [],
+      isLoading: true,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),
@@ -108,7 +123,10 @@ describe('useBasketballLeagues', () => {
   it('should return error when leagues query fails', () => {
     const error = new Error('Failed to fetch leagues');
     mockUseBasketballLeaguesApi.mockReturnValue({
-      data: undefined, isLoading: false, isError: true, error,
+      data: undefined,
+      isLoading: false,
+      isError: true,
+      error,
     } as any);
 
     const { result } = renderHook(
@@ -123,7 +141,10 @@ describe('useBasketballLeagues', () => {
   it('should call addFavorite when setFavorited is called with true', async () => {
     const mockMutateAsync = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: [], isLoading: false, isError: false, error: null,
+      favorites: [],
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: mockMutateAsync, isPending: false },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),
@@ -139,14 +160,20 @@ describe('useBasketballLeagues', () => {
     });
 
     expect(mockMutateAsync).toHaveBeenCalledWith({
-      category: 'sports', subcategory: 'basketball', type: 'league', id: '1',
+      category: 'sports',
+      subcategory: 'basketball',
+      type: 'league',
+      id: '1',
     });
   });
 
   it('should call removeFavorite when setFavorited is called with false', async () => {
     const mockRemoveMutateAsync = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: mockFavorites, isLoading: false, isError: false, error: null,
+      favorites: mockFavorites,
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: mockRemoveMutateAsync, isPending: false },
       refresh: vi.fn(),
@@ -167,7 +194,10 @@ describe('useBasketballLeagues', () => {
   it('should not call removeFavorite if league is not favorited', async () => {
     const mockRemoveMutateAsync = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: mockFavorites, isLoading: false, isError: false, error: null,
+      favorites: mockFavorites,
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: mockRemoveMutateAsync, isPending: false },
       refresh: vi.fn(),
@@ -191,7 +221,11 @@ describe('useBasketballLeagues', () => {
       () => useBasketballLeagues(mockIndexerClient, mockWalletAddress, options),
       { wrapper: createWrapper() }
     );
-    expect(mockUseBasketballLeaguesApi).toHaveBeenCalledWith(options);
+    expect(mockUseBasketballLeaguesApi).toHaveBeenCalledWith(
+      mockIndexerClient,
+      options.params,
+      { enabled: undefined }
+    );
   });
 
   it('should pass correct filters to useFavorites', () => {
@@ -199,14 +233,23 @@ describe('useBasketballLeagues', () => {
       () => useBasketballLeagues(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
     );
-    expect(mockUseFavorites).toHaveBeenCalledWith(mockIndexerClient, mockWalletAddress, {
-      category: 'sports', subcategory: 'basketball', type: 'league',
-    });
+    expect(mockUseFavorites).toHaveBeenCalledWith(
+      mockIndexerClient,
+      mockWalletAddress,
+      {
+        category: 'sports',
+        subcategory: 'basketball',
+        type: 'league',
+      }
+    );
   });
 
   it('should return empty leagues when data is undefined', () => {
     mockUseBasketballLeaguesApi.mockReturnValue({
-      data: undefined, isLoading: false, isError: false, error: null,
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      error: null,
     } as any);
 
     const { result } = renderHook(
@@ -219,7 +262,10 @@ describe('useBasketballLeagues', () => {
 
   it('should expose pending states for favorite mutations', () => {
     mockUseFavorites.mockReturnValue({
-      favorites: [], isLoading: false, isError: false, error: null,
+      favorites: [],
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: true },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),

@@ -1,17 +1,17 @@
 /**
  * Hook for NFL leagues with favorites support
- * Combines useNflLeagues from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type NflLeagueResponse,
-  type NflLeaguesParams,
-  useNflLeagues as useNflLeaguesApi,
+import type {
+  NflLeagueResponse,
+  NflLeaguesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useNflLeagues as useNflLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -90,7 +90,13 @@ export function useNflLeagues(
   walletAddress: string | undefined,
   options?: UseNflLeaguesOptions
 ): UseNflLeaguesResult {
-  const leaguesQuery = useNflLeaguesApi(options);
+  const leaguesQuery = useNflLeaguesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -108,7 +114,7 @@ export function useNflLeagues(
   }, [favorites]);
 
   const leagues = useMemo<NflLeagueWithFavorite[]>(() => {
-    const response = leaguesQuery.data?.response ?? [];
+    const response = (leaguesQuery.data?.response ?? []) as NflLeagueResponse[];
     return response.map(leagueResponse => ({
       ...leagueResponse,
       favorited: favoritedIds.has(String(leagueResponse.league.id)),

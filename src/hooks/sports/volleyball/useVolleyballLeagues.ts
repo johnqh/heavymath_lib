@@ -1,17 +1,17 @@
 /**
  * Hook for volleyball leagues with favorites support
- * Combines useVolleyballLeagues from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  useVolleyballLeagues as useVolleyballLeaguesApi,
-  type VolleyballLeagueResponse,
-  type VolleyballLeaguesParams,
+import type {
+  VolleyballLeagueResponse,
+  VolleyballLeaguesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useVolleyballLeagues as useVolleyballLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -72,7 +72,13 @@ export function useVolleyballLeagues(
   walletAddress: string | undefined,
   options?: UseVolleyballLeaguesOptions
 ): UseVolleyballLeaguesResult {
-  const leaguesQuery = useVolleyballLeaguesApi(options);
+  const leaguesQuery = useVolleyballLeaguesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,8 @@ export function useVolleyballLeagues(
   }, [favorites]);
 
   const leagues = useMemo<VolleyballLeagueWithFavorite[]>(() => {
-    const response = leaguesQuery.data?.response ?? [];
+    const response = (leaguesQuery.data?.response ??
+      []) as VolleyballLeagueResponse[];
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.id)),

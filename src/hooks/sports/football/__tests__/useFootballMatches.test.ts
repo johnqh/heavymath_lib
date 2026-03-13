@@ -4,18 +4,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createElement } from 'react';
 import { useFootballMatches } from '../useFootballMatches';
 
-// Mock the sports_api_client
-vi.mock('@sudobility/sports_api_client', () => ({
+vi.mock('@sudobility/heavymath_indexer_client', () => ({
+  useFavorites: vi.fn(),
   useFootballFixtures: vi.fn(),
 }));
 
-// Mock the indexer_client
-vi.mock('@sudobility/heavymath_indexer_client', () => ({
-  useFavorites: vi.fn(),
-}));
-
-import { useFootballFixtures } from '@sudobility/sports_api_client';
-import { useFavorites } from '@sudobility/heavymath_indexer_client';
+import {
+  useFavorites,
+  useFootballFixtures,
+} from '@sudobility/heavymath_indexer_client';
 
 const mockUseFootballFixtures = vi.mocked(useFootballFixtures);
 const mockUseFavorites = vi.mocked(useFavorites);
@@ -290,7 +287,11 @@ describe('useFootballMatches', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(mockUseFootballFixtures).toHaveBeenCalledWith(options);
+    expect(mockUseFootballFixtures).toHaveBeenCalledWith(
+      mockIndexerClient,
+      options.params,
+      { enabled: undefined }
+    );
   });
 
   it('should pass correct filters to useFavorites', () => {
@@ -353,6 +354,10 @@ describe('useFootballMatches', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(mockUseFootballFixtures).toHaveBeenCalledWith(options);
+    expect(mockUseFootballFixtures).toHaveBeenCalledWith(
+      mockIndexerClient,
+      options.params,
+      { enabled: undefined }
+    );
   });
 });

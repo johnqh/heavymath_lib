@@ -1,16 +1,13 @@
 /**
  * Hook for F1 drivers with favorites support
- * Combines useF1Drivers from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type F1Driver,
-  type F1DriversParams,
-  useF1Drivers as useF1DriversApi,
-} from '@sudobility/sports_api_client';
+import type { F1Driver, F1DriversParams } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
+  useF1Drivers as useF1DriversProxy,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -72,7 +69,13 @@ export function useF1Drivers(
   walletAddress: string | undefined,
   options?: UseF1DriversOptions
 ): UseF1DriversResult {
-  const driversQuery = useF1DriversApi(options);
+  const driversQuery = useF1DriversProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +93,7 @@ export function useF1Drivers(
   }, [favorites]);
 
   const drivers = useMemo<F1DriverWithFavorite[]>(() => {
-    const response = driversQuery.data?.response ?? [];
+    const response = (driversQuery.data?.response ?? []) as F1Driver[];
     return response.map(driver => ({
       ...driver,
       favorited: favoritedIds.has(String(driver.id)),

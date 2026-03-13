@@ -1,16 +1,16 @@
 /**
  * Hook for F1 circuits with favorites support
- * Combines useF1Circuits from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type F1Circuit,
-  type F1CircuitsParams,
-  useF1Circuits as useF1CircuitsApi,
+import type {
+  F1Circuit,
+  F1CircuitsParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
+  useF1Circuits as useF1CircuitsProxy,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -72,7 +72,13 @@ export function useF1Circuits(
   walletAddress: string | undefined,
   options?: UseF1CircuitsOptions
 ): UseF1CircuitsResult {
-  const circuitsQuery = useF1CircuitsApi(options);
+  const circuitsQuery = useF1CircuitsProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,7 @@ export function useF1Circuits(
   }, [favorites]);
 
   const circuits = useMemo<F1CircuitWithFavorite[]>(() => {
-    const response = circuitsQuery.data?.response ?? [];
+    const response = (circuitsQuery.data?.response ?? []) as F1Circuit[];
     return response.map(circuit => ({
       ...circuit,
       favorited: favoritedIds.has(String(circuit.id)),

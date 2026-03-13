@@ -1,17 +1,17 @@
 /**
  * Hook for volleyball games with favorites support
- * Combines useVolleyballGames from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  useVolleyballGames as useVolleyballGamesApi,
-  type VolleyballGame,
-  type VolleyballGamesParams,
+import type {
+  VolleyballGame,
+  VolleyballGamesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useVolleyballGames as useVolleyballGamesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -72,7 +72,13 @@ export function useVolleyballGames(
   walletAddress: string | undefined,
   options?: UseVolleyballGamesOptions
 ): UseVolleyballGamesResult {
-  const gamesQuery = useVolleyballGamesApi(options);
+  const gamesQuery = useVolleyballGamesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,7 @@ export function useVolleyballGames(
   }, [favorites]);
 
   const games = useMemo<VolleyballGameWithFavorite[]>(() => {
-    const response = gamesQuery.data?.response ?? [];
+    const response = (gamesQuery.data?.response ?? []) as VolleyballGame[];
     return response.map(game => ({
       ...game,
       favorited: favoritedIds.has(String(game.id)),

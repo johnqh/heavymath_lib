@@ -1,17 +1,17 @@
 /**
  * Hook for hockey teams with favorites support
- * Combines useHockeyTeams from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type HockeyTeamResponse,
-  type HockeyTeamsParams,
-  useHockeyTeams as useHockeyTeamsApi,
+import type {
+  HockeyTeamResponse,
+  HockeyTeamsParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useHockeyTeams as useHockeyTeamsProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -72,7 +72,13 @@ export function useHockeyTeams(
   walletAddress: string | undefined,
   options?: UseHockeyTeamsOptions
 ): UseHockeyTeamsResult {
-  const teamsQuery = useHockeyTeamsApi(options);
+  const teamsQuery = useHockeyTeamsProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,7 @@ export function useHockeyTeams(
   }, [favorites]);
 
   const teams = useMemo<HockeyTeamWithFavorite[]>(() => {
-    const response = teamsQuery.data?.response ?? [];
+    const response = (teamsQuery.data?.response ?? []) as HockeyTeamResponse[];
     return response.map(team => ({
       ...team,
       favorited: favoritedIds.has(String(team.id)),

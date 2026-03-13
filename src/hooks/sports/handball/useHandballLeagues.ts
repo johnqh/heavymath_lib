@@ -1,17 +1,17 @@
 /**
  * Hook for handball leagues with favorites support
- * Combines useHandballLeagues from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type HandballLeagueResponse,
-  type HandballLeaguesParams,
-  useHandballLeagues as useHandballLeaguesApi,
+import type {
+  HandballLeagueResponse,
+  HandballLeaguesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useHandballLeagues as useHandballLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -72,7 +72,13 @@ export function useHandballLeagues(
   walletAddress: string | undefined,
   options?: UseHandballLeaguesOptions
 ): UseHandballLeaguesResult {
-  const leaguesQuery = useHandballLeaguesApi(options);
+  const leaguesQuery = useHandballLeaguesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,8 @@ export function useHandballLeagues(
   }, [favorites]);
 
   const leagues = useMemo<HandballLeagueWithFavorite[]>(() => {
-    const response = leaguesQuery.data?.response ?? [];
+    const response = (leaguesQuery.data?.response ??
+      []) as HandballLeagueResponse[];
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.id)),

@@ -4,13 +4,11 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type MmaCategoriesParams,
-  useMmaCategories as useMmaCategoriesApi,
-} from '@sudobility/sports_api_client';
+import type { MmaCategoriesParams } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useMmaCategories as useMmaCategoriesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -75,7 +73,13 @@ export function useMmaCategories(
   walletAddress: string | undefined,
   options?: UseMmaCategoriesOptions
 ): UseMmaCategoriesResult {
-  const categoriesQuery = useMmaCategoriesApi(options);
+  const categoriesQuery = useMmaCategoriesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -93,7 +97,7 @@ export function useMmaCategories(
   }, [favorites]);
 
   const categories = useMemo<MmaCategoryWithFavorite[]>(() => {
-    const response = categoriesQuery.data?.response ?? [];
+    const response = (categoriesQuery.data?.response ?? []) as string[];
     return response.map(categoryName => ({
       name: categoryName,
       favorited: favoritedIds.has(categoryName),

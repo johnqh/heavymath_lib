@@ -1,16 +1,13 @@
 /**
  * Hook for F1 races with favorites support
- * Combines useF1Races from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type F1Race,
-  type F1RacesParams,
-  useF1Races as useF1RacesApi,
-} from '@sudobility/sports_api_client';
+import type { F1Race, F1RacesParams } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
+  useF1Races as useF1RacesProxy,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -72,7 +69,13 @@ export function useF1Races(
   walletAddress: string | undefined,
   options?: UseF1RacesOptions
 ): UseF1RacesResult {
-  const racesQuery = useF1RacesApi(options);
+  const racesQuery = useF1RacesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +93,7 @@ export function useF1Races(
   }, [favorites]);
 
   const races = useMemo<F1RaceWithFavorite[]>(() => {
-    const response = racesQuery.data?.response ?? [];
+    const response = (racesQuery.data?.response ?? []) as F1Race[];
     return response.map(race => ({
       ...race,
       favorited: favoritedIds.has(String(race.id)),

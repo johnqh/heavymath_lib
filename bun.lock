@@ -33,7 +33,6 @@
         "@sudobility/heavymath_contracts": "^0.1.25",
         "@sudobility/heavymath_indexer_client": "^0.0.20",
         "@sudobility/heavymath_types": "^0.0.11",
-        "@sudobility/sports_api_client": "^1.0.26",
         "@sudobility/types": "^1.9.57",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",

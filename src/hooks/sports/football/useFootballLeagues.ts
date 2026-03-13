@@ -1,17 +1,17 @@
 /**
  * Hook for football leagues with favorites support
- * Combines useFootballLeagues from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type FootballLeagueResponse,
-  type FootballLeaguesParams,
-  useFootballLeagues as useFootballLeaguesApi,
+import type {
+  FootballLeagueResponse,
+  FootballLeaguesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useFootballLeagues as useFootballLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -92,7 +92,13 @@ export function useFootballLeagues(
   options?: UseFootballLeaguesOptions
 ): UseFootballLeaguesResult {
   // Fetch leagues from sports API
-  const leaguesQuery = useFootballLeaguesApi(options);
+  const leaguesQuery = useFootballLeaguesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   // Fetch favorites for football leagues
   const {
@@ -113,7 +119,8 @@ export function useFootballLeagues(
 
   // Combine leagues with favorite status
   const leagues = useMemo<FootballLeagueWithFavorite[]>(() => {
-    const response = leaguesQuery.data?.response ?? [];
+    const response = (leaguesQuery.data?.response ??
+      []) as FootballLeagueResponse[];
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.league.id)),

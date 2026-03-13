@@ -1,16 +1,16 @@
 /**
  * Hook for baseball leagues with favorites support
- * Combines useBaseballLeagues from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type BaseballLeagueResponse,
-  type BaseballLeaguesParams,
-  useBaseballLeagues as useBaseballLeaguesApi,
+import type {
+  BaseballLeagueResponse,
+  BaseballLeaguesParams,
 } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
+  useBaseballLeagues as useBaseballLeaguesProxy,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -72,7 +72,13 @@ export function useBaseballLeagues(
   walletAddress: string | undefined,
   options?: UseBaseballLeaguesOptions
 ): UseBaseballLeaguesResult {
-  const leaguesQuery = useBaseballLeaguesApi(options);
+  const leaguesQuery = useBaseballLeaguesProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +96,8 @@ export function useBaseballLeagues(
   }, [favorites]);
 
   const leagues = useMemo<BaseballLeagueWithFavorite[]>(() => {
-    const response = leaguesQuery.data?.response ?? [];
+    const response = (leaguesQuery.data?.response ??
+      []) as BaseballLeagueResponse[];
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.id)),

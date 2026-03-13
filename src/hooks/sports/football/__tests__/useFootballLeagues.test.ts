@@ -4,18 +4,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createElement } from 'react';
 import { useFootballLeagues } from '../useFootballLeagues';
 
-// Mock the sports_api_client
-vi.mock('@sudobility/sports_api_client', () => ({
+vi.mock('@sudobility/heavymath_indexer_client', () => ({
+  useFavorites: vi.fn(),
   useFootballLeagues: vi.fn(),
 }));
 
-// Mock the indexer_client
-vi.mock('@sudobility/heavymath_indexer_client', () => ({
-  useFavorites: vi.fn(),
-}));
-
-import { useFootballLeagues as useFootballLeaguesApi } from '@sudobility/sports_api_client';
-import { useFavorites } from '@sudobility/heavymath_indexer_client';
+import {
+  useFavorites,
+  useFootballLeagues as useFootballLeaguesApi,
+} from '@sudobility/heavymath_indexer_client';
 
 const mockUseFootballLeaguesApi = vi.mocked(useFootballLeaguesApi);
 const mockUseFavorites = vi.mocked(useFavorites);
@@ -250,7 +247,11 @@ describe('useFootballLeagues', () => {
       { wrapper: createWrapper() }
     );
 
-    expect(mockUseFootballLeaguesApi).toHaveBeenCalledWith(options);
+    expect(mockUseFootballLeaguesApi).toHaveBeenCalledWith(
+      mockIndexerClient,
+      options.params,
+      { enabled: undefined }
+    );
   });
 
   it('should pass correct filters to useFavorites', () => {

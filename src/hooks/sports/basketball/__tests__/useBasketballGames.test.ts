@@ -4,16 +4,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createElement } from 'react';
 import { useBasketballGames } from '../useBasketballGames';
 
-vi.mock('@sudobility/sports_api_client', () => ({
+vi.mock('@sudobility/heavymath_indexer_client', () => ({
+  useFavorites: vi.fn(),
   useBasketballGames: vi.fn(),
 }));
 
-vi.mock('@sudobility/heavymath_indexer_client', () => ({
-  useFavorites: vi.fn(),
-}));
-
-import { useBasketballGames as useBasketballGamesApi } from '@sudobility/sports_api_client';
-import { useFavorites } from '@sudobility/heavymath_indexer_client';
+import {
+  useFavorites,
+  useBasketballGames as useBasketballGamesApi,
+} from '@sudobility/heavymath_indexer_client';
 
 const mockUseApi = vi.mocked(useBasketballGamesApi);
 const mockUseFavorites = vi.mocked(useFavorites);
@@ -24,7 +23,13 @@ const mockGames = [
 ];
 
 const mockFavorites = [
-  { id: 1, itemId: '101', category: 'sports', subcategory: 'basketball', type: 'game' },
+  {
+    id: 1,
+    itemId: '101',
+    category: 'sports',
+    subcategory: 'basketball',
+    type: 'game',
+  },
 ];
 
 const mockIndexerClient = {} as any;
@@ -42,11 +47,20 @@ describe('useBasketballGames', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseApi.mockReturnValue({
-      data: { response: mockGames, results: 2, paging: { current: 1, total: 1 } },
-      isLoading: false, isError: false, error: null,
+      data: {
+        response: mockGames,
+        results: 2,
+        paging: { current: 1, total: 1 },
+      },
+      isLoading: false,
+      isError: false,
+      error: null,
     } as any);
     mockUseFavorites.mockReturnValue({
-      favorites: mockFavorites, isLoading: false, isError: false, error: null,
+      favorites: mockFavorites,
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),
@@ -64,7 +78,12 @@ describe('useBasketballGames', () => {
   });
 
   it('should return isLoading true when data is loading', () => {
-    mockUseApi.mockReturnValue({ data: undefined, isLoading: true, isError: false, error: null } as any);
+    mockUseApi.mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      isError: false,
+      error: null,
+    } as any);
     const { result } = renderHook(
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
@@ -74,7 +93,12 @@ describe('useBasketballGames', () => {
 
   it('should return error when query fails', () => {
     const error = new Error('Failed');
-    mockUseApi.mockReturnValue({ data: undefined, isLoading: false, isError: true, error } as any);
+    mockUseApi.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true,
+      error,
+    } as any);
     const { result } = renderHook(
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
@@ -86,7 +110,10 @@ describe('useBasketballGames', () => {
   it('should call addFavorite when setFavorited is called with true', async () => {
     const mockMutateAsync = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: [], isLoading: false, isError: false, error: null,
+      favorites: [],
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: mockMutateAsync, isPending: false },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),
@@ -95,16 +122,24 @@ describe('useBasketballGames', () => {
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
     );
-    await act(async () => { await result.current.setFavorited(101, true); });
+    await act(async () => {
+      await result.current.setFavorited(101, true);
+    });
     expect(mockMutateAsync).toHaveBeenCalledWith({
-      category: 'sports', subcategory: 'basketball', type: 'game', id: '101',
+      category: 'sports',
+      subcategory: 'basketball',
+      type: 'game',
+      id: '101',
     });
   });
 
   it('should call removeFavorite when setFavorited is called with false', async () => {
     const mockRemove = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: mockFavorites, isLoading: false, isError: false, error: null,
+      favorites: mockFavorites,
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: mockRemove, isPending: false },
       refresh: vi.fn(),
@@ -113,14 +148,19 @@ describe('useBasketballGames', () => {
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
     );
-    await act(async () => { await result.current.setFavorited(101, false); });
+    await act(async () => {
+      await result.current.setFavorited(101, false);
+    });
     expect(mockRemove).toHaveBeenCalledWith(1);
   });
 
   it('should not call removeFavorite if item is not favorited', async () => {
     const mockRemove = vi.fn().mockResolvedValue({});
     mockUseFavorites.mockReturnValue({
-      favorites: mockFavorites, isLoading: false, isError: false, error: null,
+      favorites: mockFavorites,
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: false },
       removeFavorite: { mutateAsync: mockRemove, isPending: false },
       refresh: vi.fn(),
@@ -129,22 +169,34 @@ describe('useBasketballGames', () => {
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
     );
-    await act(async () => { await result.current.setFavorited(102, false); });
+    await act(async () => {
+      await result.current.setFavorited(102, false);
+    });
     expect(mockRemove).not.toHaveBeenCalled();
   });
 
   it('should pass correct filters to useFavorites', () => {
-    renderHook(
-      () => useBasketballGames(mockIndexerClient, mockWalletAddress),
-      { wrapper: createWrapper() }
-    );
-    expect(mockUseFavorites).toHaveBeenCalledWith(mockIndexerClient, mockWalletAddress, {
-      category: 'sports', subcategory: 'basketball', type: 'game',
+    renderHook(() => useBasketballGames(mockIndexerClient, mockWalletAddress), {
+      wrapper: createWrapper(),
     });
+    expect(mockUseFavorites).toHaveBeenCalledWith(
+      mockIndexerClient,
+      mockWalletAddress,
+      {
+        category: 'sports',
+        subcategory: 'basketball',
+        type: 'game',
+      }
+    );
   });
 
   it('should return empty array when data is undefined', () => {
-    mockUseApi.mockReturnValue({ data: undefined, isLoading: false, isError: false, error: null } as any);
+    mockUseApi.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      error: null,
+    } as any);
     const { result } = renderHook(
       () => useBasketballGames(mockIndexerClient, mockWalletAddress),
       { wrapper: createWrapper() }
@@ -154,7 +206,10 @@ describe('useBasketballGames', () => {
 
   it('should expose pending states for favorite mutations', () => {
     mockUseFavorites.mockReturnValue({
-      favorites: [], isLoading: false, isError: false, error: null,
+      favorites: [],
+      isLoading: false,
+      isError: false,
+      error: null,
       addFavorite: { mutateAsync: vi.fn(), isPending: true },
       removeFavorite: { mutateAsync: vi.fn(), isPending: false },
       refresh: vi.fn(),

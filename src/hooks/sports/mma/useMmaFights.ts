@@ -1,17 +1,14 @@
 /**
  * Hook for MMA fights with favorites support
- * Combines useMmaFights from sports_api_client with useFavorites from indexer_client
+ * Combines proxy hook from indexer_client with useFavorites from indexer_client
  */
 
 import { useCallback, useMemo } from 'react';
-import {
-  type MmaFight,
-  type MmaFightsParams,
-  useMmaFights as useMmaFightsApi,
-} from '@sudobility/sports_api_client';
+import type { MmaFight, MmaFightsParams } from '@sudobility/sports_api_client';
 import {
   type IndexerClient,
   useFavorites,
+  useMmaFights as useMmaFightsProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
 
@@ -72,7 +69,13 @@ export function useMmaFights(
   walletAddress: string | undefined,
   options?: UseMmaFightsOptions
 ): UseMmaFightsResult {
-  const fightsQuery = useMmaFightsApi(options);
+  const fightsQuery = useMmaFightsProxy(
+    indexerClient,
+    options?.params as Record<string, string | number | boolean | undefined>,
+    {
+      enabled: options?.enabled,
+    }
+  );
 
   const {
     favorites,
@@ -90,7 +93,7 @@ export function useMmaFights(
   }, [favorites]);
 
   const fights = useMemo<MmaFightWithFavorite[]>(() => {
-    const response = fightsQuery.data?.response ?? [];
+    const response = (fightsQuery.data?.response ?? []) as MmaFight[];
     return response.map(fight => ({
       ...fight,
       favorited: favoritedIds.has(String(fight.id)),
