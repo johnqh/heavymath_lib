@@ -8,8 +8,8 @@
         "@eslint/js": "^9.39.2",
         "@sudobility/auctions_contracts": "^0.1.12",
         "@sudobility/heavymath_contracts": "^0.1.25",
-        "@sudobility/heavymath_indexer_client": "^0.0.21",
-        "@sudobility/heavymath_types": "^0.0.11",
+        "@sudobility/heavymath_indexer_client": "^0.0.22",
+        "@sudobility/heavymath_types": "^0.0.12",
         "@sudobility/sports_api_client": "^1.0.26",
         "@sudobility/types": "^1.9.57",
         "@tanstack/react-query": "^5.90.5",
@@ -31,8 +31,8 @@
       "peerDependencies": {
         "@sudobility/auctions_contracts": "^0.1.12",
         "@sudobility/heavymath_contracts": "^0.1.25",
-        "@sudobility/heavymath_indexer_client": "^0.0.21",
-        "@sudobility/heavymath_types": "^0.0.11",
+        "@sudobility/heavymath_indexer_client": "^0.0.22",
+        "@sudobility/heavymath_types": "^0.0.12",
         "@sudobility/types": "^1.9.57",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
@@ -226,9 +226,9 @@
 
     "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.25", "", { "dependencies": { "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.68", "@sudobility/heavymath_types": "^0.0.11", "@sudobility/types": "^1.9.57", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-9+4uuXe34IaEibg2aXZRRc2g271oqit2PzI8UJQMhBdCB59bcNcmkWzknEQUSPu854RR3TsRxrs8L08PJGR8Rg=="],
 
-    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.21", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.11", "@sudobility/types": "^1.9.57", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-69Ub4vA5A0m4ldnSFYj5mciJ5u7XVMdTGUyToluNematRFcZYcld9zSpJmvP2amqBPaP8IdGulKM0hxUtOnNgg=="],
+    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.22", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.12", "@sudobility/types": "^1.9.57", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-vDu3nZFK2/wLAjKL0aD2/hZwdByc0xuCofs5e/W/UQryXuRJYiM/ppBaImq8CVgPbOQUfoBrsbEM2tNHwmnN8g=="],
 
-    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.11", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-Fwhzn2vwUexi8mFrjtmb2TA4NUBcHYfjim0IBSYWeJ5Tl1Ek+lqw4SqBkbG0W+bImZ85lBi7ymrn6AXt+eLl8g=="],
+    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.12", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-CFb3CGLLR7h5MeFzEChs7ZJQ8a7IkKR0jGAcGGUUZXe3T+KBbdYxkbq9ixd1VdSkY/MePz1naozUHSIOSZD2Dg=="],
 
     "@sudobility/sports_api_client": ["@sudobility/sports_api_client@1.0.26", "", { "peerDependencies": { "@sudobility/di": "^1.5.45", "@sudobility/types": "^1.9.57", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-+8jarqq9CkPd3v7XeLnRaakVnVYbK+KNOC74zeBmzy8s6LnSjTi4eelt0YtofY1Dl3PVC/A0JQFO2W24a7cLNA=="],
 
