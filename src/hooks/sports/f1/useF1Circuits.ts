@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react';
 import type {
   F1Circuit,
   F1CircuitsParams,
-} from '@sudobility/sports_api_client';
+} from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
   useF1Circuits as useF1CircuitsProxy,

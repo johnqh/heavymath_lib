@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/heavymath_lib",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Business logic library for Heavymath prediction market platform",
   "type": "module",
   "main": "dist/index.js",
@@ -38,7 +38,7 @@
   "peerDependencies": {
     "@sudobility/auctions_contracts": "^0.1.14",
     "@sudobility/heavymath_contracts": "^0.1.29",
-    "@sudobility/heavymath_indexer_client": "^0.0.26",
+    "@sudobility/heavymath_indexer_client": "^0.0.27",
     "@sudobility/heavymath_types": "^0.0.14",
     "@sudobility/types": "^1.9.59",
     "@tanstack/react-query": ">=5.0.0",
@@ -48,9 +48,8 @@
     "@eslint/js": "^9.39.2",
     "@sudobility/auctions_contracts": "^0.1.14",
     "@sudobility/heavymath_contracts": "^0.1.29",
-    "@sudobility/heavymath_indexer_client": "^0.0.26",
+    "@sudobility/heavymath_indexer_client": "^0.0.27",
     "@sudobility/heavymath_types": "^0.0.14",
-    "@sudobility/sports_api_client": "^1.0.28",
     "@sudobility/types": "^1.9.59",
     "@tanstack/react-query": "^5.90.5",
     "@testing-library/react": "^16.3.2",

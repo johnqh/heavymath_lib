@@ -4,7 +4,10 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import type { F1Race, F1RacesParams } from '@sudobility/sports_api_client';
+import type {
+  F1Race,
+  F1RacesParams,
+} from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
   useF1Races as useF1RacesProxy,

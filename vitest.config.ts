@@ -10,7 +10,6 @@ export default defineConfig({
     server: {
       deps: {
         inline: [
-          '@sudobility/sports_api_client',
           '@sudobility/heavymath_indexer_client',
         ],
       },

@@ -4,7 +4,10 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import type { MmaFight, MmaFightsParams } from '@sudobility/sports_api_client';
+import type {
+  MmaFight,
+  MmaFightsParams,
+} from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
   useFavorites,

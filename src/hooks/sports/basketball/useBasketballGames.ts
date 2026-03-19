@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react';
 import type {
   BasketballGame,
   BasketballGamesParams,
-} from '@sudobility/sports_api_client';
+} from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
   useBasketballGames as useBasketballGamesProxy,

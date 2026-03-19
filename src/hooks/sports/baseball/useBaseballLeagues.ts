@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react';
 import type {
   BaseballLeagueResponse,
   BaseballLeaguesParams,
-} from '@sudobility/sports_api_client';
+} from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
   useBaseballLeagues as useBaseballLeaguesProxy,
