@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-`@sudobility/heavymath_lib` is a React hooks library that wraps sports data fetching hooks from `@sudobility/sports_api_client` and combines them with user favorites management from `@sudobility/heavymath_indexer_client`. Every hook fetches sports data from the API, fetches the user's favorites from the indexer, then merges them so each item has a `favorited: boolean` flag and a `setFavorited()` method.
+`@sudobility/heavymath_lib` is a React hooks library that wraps sports data fetching with user favorites management from `@sudobility/heavymath_indexer_client`. Every hook fetches sports data via the indexer proxy, fetches the user's favorites, then merges them so each item has a `favorited: boolean` flag and a `setFavorited()` method.
 
 The library is platform-agnostic (works on both React web and React Native) and is part of the Heavymath prediction market ecosystem.
 
@@ -75,7 +75,7 @@ Every hook in this library follows the same pattern. Understanding one means und
 
 ### How It Works
 
-1. **Fetch sports data** using a hook from `@sudobility/sports_api_client` (e.g., `useFootballLeagues`)
+1. **Fetch sports data** using a proxy hook from `@sudobility/heavymath_indexer_client` (e.g., `useFootballLeagues`)
 2. **Fetch user favorites** using `useFavorites` from `@sudobility/heavymath_indexer_client`, filtered by category/subcategory/type
 3. **Build a `Set` of favorited IDs** from the favorites response for O(1) lookup
 4. **Merge** the sports data with a `favorited: boolean` field on each item
@@ -156,7 +156,7 @@ Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sp
 - **Framework**: Vitest 4 with happy-dom environment
 - **React Testing**: `@testing-library/react` with `renderHook` and `act`
 - **Coverage**: v8 provider, 70% threshold for branches/functions/lines/statements
-- **Mocking**: `vi.mock()` for both `@sudobility/sports_api_client` and `@sudobility/heavymath_indexer_client`
+- **Mocking**: `vi.mock()` for `@sudobility/heavymath_indexer_client`
 
 ### Current Test Coverage
 
@@ -181,11 +181,10 @@ Every hook test follows this structure:
 
 ```typescript
 // 1. Mock both dependencies before imports
-vi.mock('@sudobility/sports_api_client', () => ({ useXxx: vi.fn() }));
-vi.mock('@sudobility/heavymath_indexer_client', () => ({ useFavorites: vi.fn() }));
+vi.mock('@sudobility/heavymath_indexer_client', () => ({ useXxx: vi.fn(), useFavorites: vi.fn() }));
 
 // 2. Import the mocked functions
-import { useXxx } from '@sudobility/sports_api_client';
+import { useXxx } from '@sudobility/heavymath_indexer_client';
 import { useFavorites } from '@sudobility/heavymath_indexer_client';
 
 // 3. Create QueryClientProvider wrapper
@@ -210,7 +209,6 @@ bun run test:watch        # Watch mode
 
 | Package | Purpose |
 |---------|---------|
-| `@sudobility/sports_api_client` | Sports data fetching hooks (the raw API layer) |
 | `@sudobility/heavymath_indexer_client` | `useFavorites`, `IndexerClient`, `WalletFavoriteData` |
 | `@sudobility/heavymath_contracts` | Smart contract interactions |
 | `@sudobility/heavymath_types` | Shared type definitions |

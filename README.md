@@ -1,6 +1,6 @@
 # @sudobility/heavymath_lib
 
-React hooks library for the Heavymath prediction market platform. Wraps sports data hooks from `@sudobility/sports_api_client` and merges them with user favorites from `@sudobility/heavymath_indexer_client`.
+React hooks library for the Heavymath prediction market platform. Wraps sports data fetching with user favorites from `@sudobility/heavymath_indexer_client`.
 
 ## Installation
 
@@ -75,8 +75,7 @@ bun run verify       # Typecheck + lint + test
 
 ## Peer Dependencies
 
-- `@sudobility/sports_api_client` -- raw sports data hooks
-- `@sudobility/heavymath_indexer_client` -- favorites API
+- `@sudobility/heavymath_indexer_client` -- sports data types, proxy hooks, favorites API
 - `@sudobility/heavymath_types`, `@sudobility/types`
 - `@tanstack/react-query` >= 5.0.0, `react` >= 18.0.0
 
@@ -84,7 +83,6 @@ bun run verify       # Typecheck + lint + test
 
 - `@sudobility/heavymath_types` -- shared type definitions
 - `@sudobility/heavymath_indexer_client` -- indexer API client
-- `@sudobility/sports_api_client` -- sports data fetching
 - `heavymath_app` -- frontend web application
 
 ## License
