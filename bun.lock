@@ -6,7 +6,7 @@
       "name": "@sudobility/heavymath_lib",
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/auctions_contracts": "^0.1.13",
+        "@sudobility/auctions_contracts": "^0.1.14",
         "@sudobility/heavymath_contracts": "^0.1.29",
         "@sudobility/heavymath_indexer_client": "^0.0.26",
         "@sudobility/heavymath_types": "^0.0.14",
@@ -29,7 +29,7 @@
         "vitest": "^4.0.4",
       },
       "peerDependencies": {
-        "@sudobility/auctions_contracts": "^0.1.13",
+        "@sudobility/auctions_contracts": "^0.1.14",
         "@sudobility/heavymath_contracts": "^0.1.29",
         "@sudobility/heavymath_indexer_client": "^0.0.26",
         "@sudobility/heavymath_types": "^0.0.14",
@@ -220,7 +220,7 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/auctions_contracts": ["@sudobility/auctions_contracts@0.1.13", "", { "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-I5TmoGgl6lfZ0w/bSVVGzzoLh5uoHfafzhmXX41JMT5jAG1oVYR1rQCxDx9B9g3U+Tjm24ISCry4nXNEQXCWBA=="],
+    "@sudobility/auctions_contracts": ["@sudobility/auctions_contracts@0.1.14", "", { "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-BqZM2CZsETUQ9cw8b6cYH6GuBz2VdS1knNHd6MpaLO8rtAAUUKUlnP1ZZ/ezhuSMEPuqOJxlYKPRNfVMpdub3Q=="],
 
     "@sudobility/di": ["@sudobility/di@1.5.25", "", { "peerDependencies": { "@notifee/react-native": ">=7.0.0", "@react-native-async-storage/async-storage": ">=1.19.0", "@react-native-community/netinfo": ">=9.0.0", "@react-native-firebase/analytics": ">=18.0.0", "@react-native-firebase/app": ">=18.0.0", "@react-native-firebase/messaging": ">=18.0.0", "@react-native-firebase/remote-config": ">=18.0.0", "@sudobility/types": "^1.9.48", "firebase": ">=10.0.0", "react": ">=18.0.0", "react-native": ">=0.70.0" }, "optionalPeers": ["@notifee/react-native", "@react-native-async-storage/async-storage", "@react-native-community/netinfo", "@react-native-firebase/analytics", "@react-native-firebase/app", "@react-native-firebase/messaging", "@react-native-firebase/remote-config", "firebase", "react-native"] }, "sha512-SJjo/zDiK6UlC35JHOzW3BIfPAwXjTRO5NfKc3mTqiVqekc0F8IX9IylUfXIWLbWYp13jOGTA3FY3huQnPBxWA=="],
 
