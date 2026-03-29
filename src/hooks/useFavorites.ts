@@ -21,7 +21,9 @@ import {
 export interface FavoriteWithName extends WalletFavoriteData {
   /** Resolved display name, or undefined if not yet loaded or unavailable */
   name: string | undefined;
-  /** True while the name is being resolved */
+  /** Resolved image/logo URL, or undefined if not available */
+  image: string | undefined;
+  /** True while the name/image is being resolved */
   nameLoading: boolean;
 }
 
@@ -128,6 +130,55 @@ function extractName(
   }
 }
 
+/**
+ * Extract an image/logo URL from a sport API response item based on the entity type
+ */
+
+function extractImage(
+  type: string,
+  subcategory: string,
+  item: any
+): string | undefined {
+  switch (type) {
+    case 'league':
+      // Football and NFL nest under .league.logo, others have flat .logo
+      if (subcategory === 'football' || subcategory === 'nfl') {
+        return item.league?.logo;
+      }
+      return item.logo;
+
+    case 'team':
+      // Football nests under .team.logo, others have flat .logo
+      if (subcategory === 'football') {
+        return item.team?.logo;
+      }
+      return item.logo;
+
+    case 'match':
+    case 'game':
+      // Use home team logo as representative
+      return item.teams?.home?.logo;
+
+    case 'driver':
+      return item.image;
+
+    case 'circuit':
+      return item.image;
+
+    case 'race':
+      return item.circuit?.image;
+
+    case 'fighter':
+      return item.photo;
+
+    case 'fight':
+      return item.fighters?.first?.logo;
+
+    default:
+      return undefined;
+  }
+}
+
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
 /**
@@ -185,31 +236,49 @@ export function useFavorites(
     let queryIndex = 0;
 
     return favoritesResult.favorites.map(fav => {
-      // MMA categories: itemId is the name
+      // MMA categories: itemId is the name, no image
       if (fav.type === 'category') {
-        return { ...fav, name: fav.itemId, nameLoading: false };
+        return {
+          ...fav,
+          name: fav.itemId,
+          image: undefined,
+          nameLoading: false,
+        };
       }
 
       // Unknown type with no endpoint
       if (!TYPE_TO_ENDPOINT[fav.type]) {
-        return { ...fav, name: undefined, nameLoading: false };
+        return {
+          ...fav,
+          name: undefined,
+          image: undefined,
+          nameLoading: false,
+        };
       }
 
       const query = nameQueries[queryIndex];
       queryIndex++;
 
       if (!query) {
-        return { ...fav, name: undefined, nameLoading: false };
+        return {
+          ...fav,
+          name: undefined,
+          image: undefined,
+          nameLoading: false,
+        };
       }
 
       const response = query.data as SportsApiResponse<unknown> | undefined;
       const items = response?.response;
-      const name =
-        items && items.length > 0
-          ? extractName(fav.type, fav.subcategory, items[0])
-          : undefined;
+      const firstItem = items && items.length > 0 ? items[0] : undefined;
+      const name = firstItem
+        ? extractName(fav.type, fav.subcategory, firstItem)
+        : undefined;
+      const image = firstItem
+        ? extractImage(fav.type, fav.subcategory, firstItem)
+        : undefined;
 
-      return { ...fav, name, nameLoading: query.isLoading };
+      return { ...fav, name, image, nameLoading: query.isLoading };
     });
   }, [favoritesResult.favorites, nameQueries]);
 

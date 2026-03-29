@@ -60,7 +60,7 @@ describe('useFavorites', () => {
 
     mockUseQueries.mockReturnValue([
       {
-        data: { response: [{ league: { id: 39, name: 'Premier League', logo: '' }, country: { name: 'England' } }] },
+        data: { response: [{ league: { id: 39, name: 'Premier League', logo: 'https://example.com/pl.png' }, country: { name: 'England' } }] },
         isLoading: false,
       },
     ] as any);
@@ -72,10 +72,11 @@ describe('useFavorites', () => {
 
     expect(result.current.favorites).toHaveLength(1);
     expect(result.current.favorites[0].name).toBe('Premier League');
+    expect(result.current.favorites[0].image).toBe('https://example.com/pl.png');
     expect(result.current.favorites[0].nameLoading).toBe(false);
   });
 
-  it('should resolve basketball team name from flat name', () => {
+  it('should resolve basketball team name and logo from flat fields', () => {
     mockUseFavoritesRaw.mockReturnValue({
       ...baseFavoritesResult,
       favorites: [
@@ -85,7 +86,7 @@ describe('useFavorites', () => {
 
     mockUseQueries.mockReturnValue([
       {
-        data: { response: [{ id: 42, name: 'LA Lakers', logo: '' }] },
+        data: { response: [{ id: 42, name: 'LA Lakers', logo: 'https://example.com/lakers.png' }] },
         isLoading: false,
       },
     ] as any);
@@ -96,9 +97,10 @@ describe('useFavorites', () => {
     );
 
     expect(result.current.favorites[0].name).toBe('LA Lakers');
+    expect(result.current.favorites[0].image).toBe('https://example.com/lakers.png');
   });
 
-  it('should resolve game name as "Home vs Away"', () => {
+  it('should resolve game name as "Home vs Away" with home team logo', () => {
     mockUseFavoritesRaw.mockReturnValue({
       ...baseFavoritesResult,
       favorites: [
@@ -108,7 +110,7 @@ describe('useFavorites', () => {
 
     mockUseQueries.mockReturnValue([
       {
-        data: { response: [{ teams: { home: { name: 'Celtics' }, away: { name: 'Heat' } } }] },
+        data: { response: [{ teams: { home: { name: 'Celtics', logo: 'https://example.com/celtics.png' }, away: { name: 'Heat', logo: 'https://example.com/heat.png' } } }] },
         isLoading: false,
       },
     ] as any);
@@ -119,9 +121,10 @@ describe('useFavorites', () => {
     );
 
     expect(result.current.favorites[0].name).toBe('Celtics vs Heat');
+    expect(result.current.favorites[0].image).toBe('https://example.com/celtics.png');
   });
 
-  it('should use itemId as name for MMA categories without API call', () => {
+  it('should use itemId as name for MMA categories without API call and no image', () => {
     mockUseFavoritesRaw.mockReturnValue({
       ...baseFavoritesResult,
       favorites: [
@@ -137,6 +140,7 @@ describe('useFavorites', () => {
     );
 
     expect(result.current.favorites[0].name).toBe('Middleweight');
+    expect(result.current.favorites[0].image).toBeUndefined();
     expect(result.current.favorites[0].nameLoading).toBe(false);
   });
 
@@ -228,7 +232,7 @@ describe('useFavorites', () => {
 
     mockUseQueries.mockReturnValue([
       {
-        data: { response: [{ id: 1, name: 'Max Verstappen' }] },
+        data: { response: [{ id: 1, name: 'Max Verstappen', image: 'https://example.com/max.png' }] },
         isLoading: false,
       },
     ] as any);
@@ -242,6 +246,7 @@ describe('useFavorites', () => {
     const queriesCall = mockUseQueries.mock.calls[0][0] as any;
     expect(queriesCall.queries[0].queryKey).toEqual(['sports', 'formula1', '/drivers', { id: '1' }]);
     expect(result.current.favorites[0].name).toBe('Max Verstappen');
+    expect(result.current.favorites[0].image).toBe('https://example.com/max.png');
   });
 
   it('should resolve NFL league name from nested league.name', () => {
@@ -267,7 +272,7 @@ describe('useFavorites', () => {
     expect(result.current.favorites[0].name).toBe('NFL');
   });
 
-  it('should resolve football team name from nested team.name', () => {
+  it('should resolve football team name and logo from nested team fields', () => {
     mockUseFavoritesRaw.mockReturnValue({
       ...baseFavoritesResult,
       favorites: [
@@ -277,7 +282,7 @@ describe('useFavorites', () => {
 
     mockUseQueries.mockReturnValue([
       {
-        data: { response: [{ team: { id: 33, name: 'Manchester United', logo: '' } }] },
+        data: { response: [{ team: { id: 33, name: 'Manchester United', logo: 'https://example.com/mufc.png' } }] },
         isLoading: false,
       },
     ] as any);
@@ -288,6 +293,7 @@ describe('useFavorites', () => {
     );
 
     expect(result.current.favorites[0].name).toBe('Manchester United');
+    expect(result.current.favorites[0].image).toBe('https://example.com/mufc.png');
   });
 
   it('should resolve MMA fight as "Fighter1 vs Fighter2"', () => {
