@@ -3,3 +3,4 @@
  */
 
 export * from './sports';
+export * from './useFavorites';
