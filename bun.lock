@@ -8,7 +8,7 @@
         "@eslint/js": "^9.39.2",
         "@sudobility/auctions_contracts": "^0.1.15",
         "@sudobility/heavymath_contracts": "^0.1.32",
-        "@sudobility/heavymath_indexer_client": "^0.0.30",
+        "@sudobility/heavymath_indexer_client": "^0.0.31",
         "@sudobility/heavymath_types": "^0.0.17",
         "@sudobility/types": "^1.9.61",
         "@tanstack/react-query": "^5.90.5",
@@ -223,7 +223,7 @@
 
     "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.32", "", { "dependencies": { "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.72", "@sudobility/heavymath_types": "^0.0.16", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-KewD9dlgQqvqA+WGMxbi6ocj5vFzh09BeJoqxd/zgFKWbXKU0e7TValXKPhLoi3ZkGNytAvjPzCcpPyooBhuww=="],
 
-    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.30", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.16", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-UhBp2yKSemWbXyegxb7WJYm7xEqgwivKpB9PCb9Fs7TBibxbeAgugXss0Uul28h8r4EmpPnxbY0XvhcJEUQByw=="],
+    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.31", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.17", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-2RqYzSsjB8m069ztILQCRb7XC2UjGb0Tw2+0djgGoGQ7fahU2kc3MUmkRIWdR1uWsbtYsO3Ed0W8yVToSM96bA=="],
 
     "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.17", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-T0vVVpyfTH9JmH0fr0fCkJ3BxfFuxvMS7DhHCkgkGxfiPkBc8g4JEnMgQsuwsDdtU3vbuRjzvlHVsP+2Mcf0cA=="],
 
