@@ -11,6 +11,7 @@ import type {
 import {
   type IndexerClient,
   useBasketballGames as useBasketballGamesProxy,
+  useFavoriteCounts,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -25,6 +26,8 @@ const FAVORITES_TYPE = 'game';
 export interface BasketballGameWithFavorite extends BasketballGame {
   /** Whether the current user has favorited this game */
   favorited: boolean;
+  /** Number of users who have favorited this game */
+  favoriteCount: number;
 }
 
 /**
@@ -114,13 +117,27 @@ export function useBasketballGames(
     return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
+  const gameIds = useMemo(() => {
+    const response = (gamesQuery.data?.response ?? []) as BasketballGame[];
+    return response.map(g => String(g.id));
+  }, [gamesQuery.data?.response]);
+
+  const { counts } = useFavoriteCounts(
+    indexerClient,
+    FAVORITES_CATEGORY,
+    FAVORITES_SUBCATEGORY,
+    FAVORITES_TYPE,
+    gameIds
+  );
+
   const games = useMemo<BasketballGameWithFavorite[]>(() => {
     const response = (gamesQuery.data?.response ?? []) as BasketballGame[];
     return response.map(game => ({
       ...game,
       favorited: favoritedIds.has(String(game.id)),
+      favoriteCount: counts[String(game.id)] ?? 0,
     }));
-  }, [gamesQuery.data?.response, favoritedIds]);
+  }, [gamesQuery.data?.response, favoritedIds, counts]);
 
   const setFavorited = useCallback(
     async (gameId: number, favorited: boolean) => {

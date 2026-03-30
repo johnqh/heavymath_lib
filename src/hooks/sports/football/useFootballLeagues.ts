@@ -10,6 +10,7 @@ import type {
 } from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
+  useFavoriteCounts,
   useFavorites,
   useFootballLeagues as useFootballLeaguesProxy,
   type WalletFavoriteData,
@@ -25,6 +26,8 @@ const FAVORITES_TYPE = 'league';
 export interface FootballLeagueWithFavorite extends FootballLeagueResponse {
   /** Whether the current user has favorited this league */
   favorited: boolean;
+  /** Total number of users who favorited this league */
+  favoriteCount: number;
 }
 
 /**
@@ -117,6 +120,21 @@ export function useFootballLeagues(
     return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
+  // Fetch global favorite counts
+  const leagueIds = useMemo(() => {
+    const response = (leaguesQuery.data?.response ??
+      []) as FootballLeagueResponse[];
+    return response.map(l => String(l.league.id));
+  }, [leaguesQuery.data?.response]);
+
+  const { counts } = useFavoriteCounts(
+    indexerClient,
+    FAVORITES_CATEGORY,
+    FAVORITES_SUBCATEGORY,
+    FAVORITES_TYPE,
+    leagueIds
+  );
+
   // Combine leagues with favorite status
   const leagues = useMemo<FootballLeagueWithFavorite[]>(() => {
     const response = (leaguesQuery.data?.response ??
@@ -124,8 +142,9 @@ export function useFootballLeagues(
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.league.id)),
+      favoriteCount: counts[String(league.league.id)] ?? 0,
     }));
-  }, [leaguesQuery.data?.response, favoritedIds]);
+  }, [leaguesQuery.data?.response, favoritedIds, counts]);
 
   // Set favorite status for a league
   const setFavorited = useCallback(

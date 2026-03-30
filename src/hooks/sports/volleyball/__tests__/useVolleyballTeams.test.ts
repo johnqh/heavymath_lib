@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { useVolleyballTeams } from '../useVolleyballTeams';
 vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
+  useFavoriteCounts: vi.fn().mockReturnValue({ counts: {}, isLoading: false }),
   useVolleyballTeams: vi.fn(),
 }));
 import {

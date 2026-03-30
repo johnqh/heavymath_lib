@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { useF1Races } from '../useF1Races';
 vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
+  useFavoriteCounts: vi.fn().mockReturnValue({ counts: {}, isLoading: false }),
   useF1Races: vi.fn(),
 }));
 import {

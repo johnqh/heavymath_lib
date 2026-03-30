@@ -10,6 +10,7 @@ import type {
 } from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
+  useFavoriteCounts,
   useFavorites,
   useFootballFixtures as useFootballFixturesProxy,
   type WalletFavoriteData,
@@ -25,6 +26,8 @@ const FAVORITES_TYPE = 'match';
 export interface FootballMatchWithFavorite extends FootballFixtureResponse {
   /** Whether the current user has favorited this match */
   favorited: boolean;
+  /** Total number of users who favorited this match */
+  favoriteCount: number;
 }
 
 /**
@@ -129,6 +132,21 @@ export function useFootballMatches(
     return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
+  // Fetch global favorite counts
+  const matchIds = useMemo(() => {
+    const response = (fixturesQuery.data?.response ??
+      []) as FootballFixtureResponse[];
+    return response.map(f => String(f.fixture.id));
+  }, [fixturesQuery.data?.response]);
+
+  const { counts } = useFavoriteCounts(
+    indexerClient,
+    FAVORITES_CATEGORY,
+    FAVORITES_SUBCATEGORY,
+    FAVORITES_TYPE,
+    matchIds
+  );
+
   // Combine matches with favorite status
   const matches = useMemo<FootballMatchWithFavorite[]>(() => {
     const response = (fixturesQuery.data?.response ??
@@ -136,8 +154,9 @@ export function useFootballMatches(
     return response.map(fixture => ({
       ...fixture,
       favorited: favoritedIds.has(String(fixture.fixture.id)),
+      favoriteCount: counts[String(fixture.fixture.id)] ?? 0,
     }));
-  }, [fixturesQuery.data?.response, favoritedIds]);
+  }, [fixturesQuery.data?.response, favoritedIds, counts]);
 
   // Set favorite status for a match
   const setFavorited = useCallback(

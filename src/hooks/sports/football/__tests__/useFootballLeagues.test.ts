@@ -6,6 +6,7 @@ import { useFootballLeagues } from '../useFootballLeagues';
 
 vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
+  useFavoriteCounts: vi.fn().mockReturnValue({ counts: {}, isLoading: false }),
   useFootballLeagues: vi.fn(),
 }));
 

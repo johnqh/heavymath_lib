@@ -5,6 +5,7 @@ import { createElement } from 'react';
 import { useF1Drivers } from '../useF1Drivers';
 vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
+  useFavoriteCounts: vi.fn().mockReturnValue({ counts: {}, isLoading: false }),
   useF1Drivers: vi.fn(),
 }));
 import {

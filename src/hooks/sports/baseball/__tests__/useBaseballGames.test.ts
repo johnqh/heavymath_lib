@@ -6,6 +6,7 @@ import { useBaseballGames } from '../useBaseballGames';
 
 vi.mock('@sudobility/heavymath_indexer_client', () => ({
   useFavorites: vi.fn(),
+  useFavoriteCounts: vi.fn().mockReturnValue({ counts: {}, isLoading: false }),
   useBaseballGames: vi.fn(),
 }));
 

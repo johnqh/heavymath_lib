@@ -11,6 +11,7 @@ import type {
 import {
   type IndexerClient,
   useBasketballLeagues as useBasketballLeaguesProxy,
+  useFavoriteCounts,
   useFavorites,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
@@ -25,6 +26,8 @@ const FAVORITES_TYPE = 'league';
 export interface BasketballLeagueWithFavorite extends BasketballLeagueResponse {
   /** Whether the current user has favorited this league */
   favorited: boolean;
+  /** Number of users who have favorited this league */
+  favoriteCount: number;
 }
 
 /**
@@ -113,14 +116,29 @@ export function useBasketballLeagues(
     return new Set(favorites.map((f: WalletFavoriteData) => f.itemId));
   }, [favorites]);
 
+  const leagueIds = useMemo(() => {
+    const response = (leaguesQuery.data?.response ??
+      []) as BasketballLeagueResponse[];
+    return response.map(l => String(l.id));
+  }, [leaguesQuery.data?.response]);
+
+  const { counts } = useFavoriteCounts(
+    indexerClient,
+    FAVORITES_CATEGORY,
+    FAVORITES_SUBCATEGORY,
+    FAVORITES_TYPE,
+    leagueIds
+  );
+
   const leagues = useMemo<BasketballLeagueWithFavorite[]>(() => {
     const response = (leaguesQuery.data?.response ??
       []) as BasketballLeagueResponse[];
     return response.map(league => ({
       ...league,
       favorited: favoritedIds.has(String(league.id)),
+      favoriteCount: counts[String(league.id)] ?? 0,
     }));
-  }, [leaguesQuery.data?.response, favoritedIds]);
+  }, [leaguesQuery.data?.response, favoritedIds, counts]);
 
   const setFavorited = useCallback(
     async (leagueId: number, favorited: boolean) => {
