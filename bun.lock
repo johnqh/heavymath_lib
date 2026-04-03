@@ -7,9 +7,9 @@
       "devDependencies": {
         "@eslint/js": "^9.39.2",
         "@sudobility/auctions_contracts": "^0.1.15",
-        "@sudobility/heavymath_contracts": "^0.1.40",
-        "@sudobility/heavymath_indexer_client": "^0.0.34",
-        "@sudobility/heavymath_types": "^0.0.19",
+        "@sudobility/heavymath_contracts": "^0.1.42",
+        "@sudobility/heavymath_indexer_client": "^0.0.35",
+        "@sudobility/heavymath_types": "^0.0.20",
         "@sudobility/types": "^1.9.61",
         "@tanstack/react-query": "^5.90.5",
         "@testing-library/react": "^16.3.2",
@@ -29,9 +29,9 @@
       },
       "peerDependencies": {
         "@sudobility/auctions_contracts": "^0.1.15",
-        "@sudobility/heavymath_contracts": "^0.1.40",
-        "@sudobility/heavymath_indexer_client": "^0.0.34",
-        "@sudobility/heavymath_types": "^0.0.19",
+        "@sudobility/heavymath_contracts": "^0.1.42",
+        "@sudobility/heavymath_indexer_client": "^0.0.35",
+        "@sudobility/heavymath_types": "^0.0.20",
         "@sudobility/types": "^1.9.61",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
@@ -351,11 +351,11 @@
 
     "@sudobility/auctions_contracts": ["@sudobility/auctions_contracts@0.1.15", "", { "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-G2/9mQS2QZjBE1vA+mAoe1gIzlXpT/B8S8ralY0Gm83LrC8V0m8voF4GIKpEL/YXpEU66driLYKJQuq7yUyNOQ=="],
 
-    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.40", "", { "dependencies": { "@chainlink/contracts": "^1.3.0", "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.72", "@sudobility/heavymath_types": "^0.0.18", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-++guTIafZpUoadqPdOMvKqMvvVR8HYw8zfRawAjeexa9naTcFBmiFQIg1VSb6qWFiEEUh4NvVL1pS3qB0eNhlQ=="],
+    "@sudobility/heavymath_contracts": ["@sudobility/heavymath_contracts@0.1.42", "", { "dependencies": { "@chainlink/contracts": "^1.3.0", "@openzeppelin/contracts-upgradeable": "^5.0.0" }, "peerDependencies": { "@solana/spl-token": ">=0.4.0", "@solana/web3.js": ">=1.95.0", "@sudobility/configs": "^0.0.72", "@sudobility/heavymath_types": "^0.0.20", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "buffer": ">=6.0.0", "react": "^18.0.0 || ^19.0.0", "react-native": ">=0.70.0", "react-native-get-random-values": ">=1.8.0", "react-native-url-polyfill": ">=2.0.0", "text-encoding": ">=0.7.0", "viem": ">=2.0.0" }, "optionalPeers": ["@solana/spl-token", "@solana/web3.js", "@sudobility/configs", "@tanstack/react-query", "buffer", "react", "react-native", "react-native-get-random-values", "react-native-url-polyfill", "text-encoding", "viem"] }, "sha512-7rkukVxQbviO3IgyTPEeiWEf0ehEps/qYYuNtBwaekIlPP5VWzLHwZF0nxPUYBGKyqnZFoe0pDVXxYW99c8eSQ=="],
 
-    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.34", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.19", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-/hDpvpUKEjjft5yvz7PHl+xtL9FLb3GO5rvL43eEpwHhGJI38qwjlQGsYPv0m4uioN7mhzAKU9hvKLe4WdOplQ=="],
+    "@sudobility/heavymath_indexer_client": ["@sudobility/heavymath_indexer_client@0.0.35", "", { "peerDependencies": { "@sudobility/heavymath_types": "^0.0.20", "@sudobility/types": "^1.9.61", "@tanstack/react-query": ">=5.0.0", "react": ">=18.0.0", "zustand": "^5.0.0" } }, "sha512-QPI58LqRJlLqzeLLBljH6wmIAKwTNgZJwmX/80Cw/6Pt2u30M5ROC/vnhOsQqnzzsjr6tB8OLkzPKG5R93saeA=="],
 
-    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.19", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-28MBQHWdwX8u/hyOre9WWKL/1eQJdnIQZF5bJGzG8c+kRnus0VDm0fzRFv2SJMeXXHFXldn29ZW+Hs4znTjWKQ=="],
+    "@sudobility/heavymath_types": ["@sudobility/heavymath_types@0.0.20", "", { "peerDependencies": { "viem": "^2.0.0" }, "optionalPeers": ["viem"] }, "sha512-3qXD8wDJ28HlkZIdz7TgY5pSrpr3OI/1vD+sDy4SLOgxdeDXsJH7U/JIfstTgXoKp1MEDklCiFteUiGWEgI1cQ=="],
 
     "@sudobility/types": ["@sudobility/types@1.9.61", "", {}, "sha512-SODGpstB/iKfK3H/4BvJx/FBcc1h3gutUjGotyxN19VnOfWyzaDoEmW7eyoxOAYhZyXMXagSiii+NIEZvuxKog=="],
 
