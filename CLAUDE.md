@@ -296,3 +296,31 @@ bun publish                       # Runs prepublishOnly automatically (clean + b
 ```
 
 Output goes to `dist/` with `.js`, `.d.ts`, and `.d.ts.map` files. Only `dist/**/*` is included in the published package. Access is restricted (`publishConfig.access: "restricted"`).
+
+## Ecosystem Context
+
+This library adds business logic on top of the indexer client:
+
+```
+heavymath_contracts  (equilibrium algorithm originates here in Solidity)
+       ↓
+heavymath_indexer    (REST API including /api/sports/* proxy)
+       ↓
+heavymath_indexer_client  (proxy hooks: useFootballLeagues, useFavorites, etc.)
+       ↓ peer dependency
+heavymath_lib        ← YOU ARE HERE (merges sports + favorites, off-chain equilibrium)
+       ↓
+heavymath_app        (consumes the merged hooks)
+```
+
+### What This Library Actually Does
+
+1. **Sports + Favorites Merging**: Each hook (e.g., `useFootballLeagues`) calls the indexer_client proxy hook to fetch sports data AND `useFavorites` to fetch the user's favorites, then merges them so every item has a `favorited: boolean` field and optionally a `favoriteCount: number`.
+
+2. **Off-Chain Equilibrium Calculation** (`src/market/equilibrium.ts`): Mirrors the on-chain `calculateEquilibrium()` in PredictionMarket.sol but runs in JavaScript. Used to pre-compute equilibrium off-chain before calling `lockMarketWithEquilibrium()` to save ~200k gas.
+
+### Dependency Chain
+
+This library depends on `@sudobility/heavymath_indexer_client` as a **peer dependency**. The proxy hooks it wraps (e.g., `useFootballLeagues` from indexer_client) call the indexer's `/api/sports/:sport/*` endpoint, which proxies to api-sports.io with TTL caching.
+
+When indexer_client adds new sports proxy hooks, corresponding wrapper hooks should be added here to include favorites support.
