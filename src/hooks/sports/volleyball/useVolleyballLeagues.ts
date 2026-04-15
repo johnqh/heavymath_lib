@@ -6,6 +6,7 @@
 import { useCallback, useMemo } from 'react';
 import type {
   VolleyballLeagueResponse,
+  VolleyballLeagueSeason,
   VolleyballLeaguesParams,
 } from '@sudobility/heavymath_indexer_client';
 import {
@@ -15,6 +16,7 @@ import {
   useVolleyballLeagues as useVolleyballLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
+import { getLatestSeason, getSeasonData } from '../utils/seasons';
 
 const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'volleyball';
@@ -46,6 +48,14 @@ export interface UseVolleyballLeaguesOptions {
 export interface UseVolleyballLeaguesResult {
   /** Array of volleyball leagues with favorited flag */
   leagues: VolleyballLeagueWithFavorite[];
+  /** First matching competition when querying a specific league */
+  competition: VolleyballLeagueWithFavorite | null;
+  /** Available seasons for the first matching competition */
+  seasons: VolleyballLeagueSeason[];
+  /** Latest available season for the first matching competition */
+  latestSeason: VolleyballLeagueSeason | null;
+  /** Look up season metadata for the first matching competition */
+  getSeasonData: (season: number) => VolleyballLeagueSeason | undefined;
   /** True if either the leagues or favorites query is loading */
   isLoading: boolean;
   /** True if the leagues query encountered an error */
@@ -122,6 +132,18 @@ export function useVolleyballLeagues(
     }));
   }, [leaguesQuery.data?.response, favoritedIds, counts]);
 
+  const competition = useMemo(() => leagues[0] ?? null, [leagues]);
+  const seasons = useMemo(() => competition?.seasons ?? [], [competition]);
+  const latestSeason = useMemo(
+    () => getLatestSeason(seasons, season => season.season),
+    [seasons]
+  );
+
+  const lookupSeasonData = useCallback(
+    (season: number) => getSeasonData(seasons, season, item => item.season),
+    [seasons]
+  );
+
   const setFavorited = useCallback(
     async (leagueId: number, favorited: boolean) => {
       const itemId = String(leagueId);
@@ -146,6 +168,10 @@ export function useVolleyballLeagues(
 
   return {
     leagues,
+    competition,
+    seasons,
+    latestSeason,
+    getSeasonData: lookupSeasonData,
     isLoading: leaguesQuery.isLoading || favoritesLoading,
     isError: leaguesQuery.isError,
     error: leaguesQuery.error,

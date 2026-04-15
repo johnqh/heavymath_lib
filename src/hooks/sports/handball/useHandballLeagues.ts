@@ -6,6 +6,7 @@
 import { useCallback, useMemo } from 'react';
 import type {
   HandballLeagueResponse,
+  HandballLeagueSeason,
   HandballLeaguesParams,
 } from '@sudobility/heavymath_indexer_client';
 import {
@@ -15,6 +16,7 @@ import {
   useHandballLeagues as useHandballLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
+import { getLatestSeason, getSeasonData } from '../utils/seasons';
 
 const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'handball';
@@ -46,6 +48,14 @@ export interface UseHandballLeaguesOptions {
 export interface UseHandballLeaguesResult {
   /** Array of handball leagues with favorited flag */
   leagues: HandballLeagueWithFavorite[];
+  /** First matching competition when querying a specific league */
+  competition: HandballLeagueWithFavorite | null;
+  /** Available seasons for the first matching competition */
+  seasons: HandballLeagueSeason[];
+  /** Latest available season for the first matching competition */
+  latestSeason: HandballLeagueSeason | null;
+  /** Look up season metadata for the first matching competition */
+  getSeasonData: (season: number) => HandballLeagueSeason | undefined;
   /** True if either the leagues or favorites query is loading */
   isLoading: boolean;
   /** True if the leagues query encountered an error */
@@ -122,6 +132,18 @@ export function useHandballLeagues(
     }));
   }, [leaguesQuery.data?.response, favoritedIds, counts]);
 
+  const competition = useMemo(() => leagues[0] ?? null, [leagues]);
+  const seasons = useMemo(() => competition?.seasons ?? [], [competition]);
+  const latestSeason = useMemo(
+    () => getLatestSeason(seasons, season => season.season),
+    [seasons]
+  );
+
+  const lookupSeasonData = useCallback(
+    (season: number) => getSeasonData(seasons, season, item => item.season),
+    [seasons]
+  );
+
   const setFavorited = useCallback(
     async (leagueId: number, favorited: boolean) => {
       const itemId = String(leagueId);
@@ -146,6 +168,10 @@ export function useHandballLeagues(
 
   return {
     leagues,
+    competition,
+    seasons,
+    latestSeason,
+    getSeasonData: lookupSeasonData,
     isLoading: leaguesQuery.isLoading || favoritesLoading,
     isError: leaguesQuery.isError,
     error: leaguesQuery.error,

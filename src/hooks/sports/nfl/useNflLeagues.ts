@@ -7,6 +7,7 @@ import { useCallback, useMemo } from 'react';
 import type {
   NflLeagueResponse,
   NflLeaguesParams,
+  NflSeason,
 } from '@sudobility/heavymath_indexer_client';
 import {
   type IndexerClient,
@@ -15,6 +16,7 @@ import {
   useNflLeagues as useNflLeaguesProxy,
   type WalletFavoriteData,
 } from '@sudobility/heavymath_indexer_client';
+import { getLatestSeason, getSeasonData } from '../utils/seasons';
 
 const FAVORITES_CATEGORY = 'sports';
 const FAVORITES_SUBCATEGORY = 'nfl';
@@ -46,6 +48,14 @@ export interface UseNflLeaguesOptions {
 export interface UseNflLeaguesResult {
   /** Array of NFL leagues with favorited flag */
   leagues: NflLeagueWithFavorite[];
+  /** First matching competition when querying a specific league */
+  competition: NflLeagueWithFavorite | null;
+  /** Available seasons for the first matching competition */
+  seasons: NflSeason[];
+  /** Latest available season for the first matching competition */
+  latestSeason: NflSeason | null;
+  /** Look up season metadata for the first matching competition */
+  getSeasonData: (season: number) => NflSeason | undefined;
   /** True if either the leagues or favorites query is loading */
   isLoading: boolean;
   /** True if the leagues query encountered an error */
@@ -138,6 +148,18 @@ export function useNflLeagues(
     }));
   }, [leaguesQuery.data?.response, favoritedIds, counts]);
 
+  const competition = useMemo(() => leagues[0] ?? null, [leagues]);
+  const seasons = useMemo(() => competition?.seasons ?? [], [competition]);
+  const latestSeason = useMemo(
+    () => getLatestSeason(seasons, season => season.season),
+    [seasons]
+  );
+
+  const lookupSeasonData = useCallback(
+    (season: number) => getSeasonData(seasons, season, item => item.season),
+    [seasons]
+  );
+
   const setFavorited = useCallback(
     async (leagueId: number, favorited: boolean) => {
       const itemId = String(leagueId);
@@ -162,6 +184,10 @@ export function useNflLeagues(
 
   return {
     leagues,
+    competition,
+    seasons,
+    latestSeason,
+    getSeasonData: lookupSeasonData,
     isLoading: leaguesQuery.isLoading || favoritesLoading,
     isError: leaguesQuery.isError,
     error: leaguesQuery.error,
