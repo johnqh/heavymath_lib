@@ -91,7 +91,7 @@ export interface UseFootballMatchesResult {
  *
  * // Get today's matches
  * function TodayMatches() {
- *   const today = new Date().toISOString().split('T')[0];
+ *   const today = getCurrentDatetime(false).toISOString().split('T')[0];
  *   const { matches } = useFootballMatches(
  *     indexerClient,
  *     walletAddress,
