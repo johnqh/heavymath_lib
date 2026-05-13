@@ -30,7 +30,7 @@
       "peerDependencies": {
         "@sudobility/auctions_contracts": "^0.1.19",
         "@sudobility/heavymath_contracts": "^0.1.65",
-        "@sudobility/heavymath_indexer_client": "^0.0.46",
+        "@sudobility/heavymath_indexer_client": "^0.0.49",
         "@sudobility/heavymath_types": "^0.0.29",
         "@sudobility/types": "^1.9.62",
         "@tanstack/react-query": ">=5.0.0",
