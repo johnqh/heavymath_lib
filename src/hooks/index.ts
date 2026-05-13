@@ -4,3 +4,4 @@
 
 export * from './sports';
 export * from './useFavorites';
+export * from './useDiscussionForEntity';
