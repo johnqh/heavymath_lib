@@ -6,7 +6,7 @@
 
 The library is platform-agnostic (works on both React web and React Native) and is part of the Heavymath prediction market ecosystem.
 
-**Package**: `@sudobility/heavymath_lib` (v0.0.10, BUSL-1.1 license)
+**Package**: `@sudobility/heavymath_lib` (v0.0.80, BUSL-1.1 license)
 **Author**: John Huang
 
 ## Quick Commands
@@ -142,7 +142,7 @@ Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sp
 - `useMmaFighters` - Individual fighters
 - `useMmaFights` - Fight events
 
-### F1 (four entity types)
+### F1 (four entity types, unlike the standard three)
 
 - `useF1Drivers` - F1 drivers
 - `useF1Teams` - F1 teams/constructors
@@ -308,7 +308,7 @@ heavymath_indexer    (REST API including /api/sports/* proxy)
        ↓
 heavymath_indexer_client  (proxy hooks: useFootballLeagues, useFavorites, etc.)
        ↓ peer dependency
-heavymath_lib        ← YOU ARE HERE (merges sports + favorites, off-chain equilibrium)
+heavymath_lib        ← YOU ARE HERE (merges sports + favorites)
        ↓
 heavymath_app        (consumes the merged hooks)
 ```
@@ -317,7 +317,7 @@ heavymath_app        (consumes the merged hooks)
 
 1. **Sports + Favorites Merging**: Each hook (e.g., `useFootballLeagues`) calls the indexer_client proxy hook to fetch sports data AND `useFavorites` to fetch the user's favorites, then merges them so every item has a `favorited: boolean` field and optionally a `favoriteCount: number`.
 
-2. **Off-Chain Equilibrium Calculation** (`src/market/equilibrium.ts`): Mirrors the on-chain `calculateEquilibrium()` in PredictionMarket.sol but runs in JavaScript. Used to pre-compute equilibrium off-chain before calling `lockMarketWithEquilibrium()` to save ~200k gas.
+2. **Market module** (`src/market/`): Previously contained off-chain equilibrium calculation code. The equilibrium source has been removed; `src/market/index.ts` is now an empty export (`export {}`). Stale build artifacts may remain in `dist/market/` from prior builds — these are not used and will be cleaned on the next `bun run clean && bun run build`.
 
 ### Dependency Chain
 
