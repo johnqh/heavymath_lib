@@ -6,7 +6,7 @@
 
 The library is platform-agnostic (works on both React web and React Native) and is part of the Heavymath prediction market ecosystem.
 
-**Package**: `@sudobility/heavymath_lib` (v0.0.80, BUSL-1.1 license)
+**Package**: `@sudobility/heavymath_lib` (v0.0.82, BUSL-1.1 license)
 **Author**: John Huang
 
 ## Quick Commands
@@ -38,7 +38,9 @@ heavymath_lib/
 ├── src/
 │   ├── index.ts                          # Root exports (re-exports ./hooks)
 │   ├── hooks/
-│   │   ├── index.ts                      # Re-exports ./sports
+│   │   ├── index.ts                      # Re-exports ./sports, ./useFavorites, ./useDiscussionForEntity
+│   │   ├── useFavorites.ts                # Favorites with resolved display names
+│   │   ├── useDiscussionForEntity.ts       # Discussion + auth state composition
 │   │   └── sports/
 │   │       ├── index.ts                  # Re-exports all 10 sport modules
 │   │       ├── football/
@@ -55,7 +57,9 @@ heavymath_lib/
 │   │       ├── handball/                 # useHandballLeagues, Teams, Games
 │   │       ├── volleyball/               # useVolleyballLeagues, Teams, Games
 │   │       ├── mma/                      # useMmaCategories, Fighters, Fights
-│   │       └── f1/                       # useF1Drivers, Teams, Races, Circuits
+│   │       ├── f1/                       # useF1Drivers, Teams, Races, Circuits
+│   │       ├── utils/
+│   │       │   └── seasons.ts             # Season lookup utilities
 │   ├── __tests__/
 │   │   └── index.test.ts                # Smoke tests for root exports
 │   └── test/
@@ -148,6 +152,11 @@ Note: Football uses "Matches" (wrapping the API's "Fixtures"); all other team sp
 - `useF1Teams` - F1 teams/constructors
 - `useF1Races` - F1 race events
 - `useF1Circuits` - F1 circuits/tracks
+
+### Non-Sport Hooks
+
+- `useFavorites` (`src/hooks/useFavorites.ts`) - Wraps the raw indexer_client `useFavorites` hook and enriches favorites with resolved display names and images via `IndexerClient.getSportsData()`. Uses 24-hour cache for name resolution.
+- `useDiscussionForEntity` (`src/hooks/useDiscussionForEntity.ts`) - Composition hook combining discussion metadata with auth state. Checks discussion locked status and determines if user can post comments.
 
 ## Testing
 
@@ -286,7 +295,7 @@ bun run test:watch        # Watch mode
 - **`isLoading` combines both queries**: A hook reports `isLoading: true` when either the sports data OR the favorites are still loading.
 - **Error state only reflects sports data**: `isError` and `error` come from the sports API query, not from the favorites query.
 - **Build uses `tsconfig.build.json`**, not `tsconfig.json`. The build config extends the base but excludes test files and `__tests__/` directories.
-- **No CI/CD workflows** exist (no `.github/workflows/` directory).
+- **CI/CD** uses a reusable GitHub Actions workflow at `.github/workflows/ci-cd.yml`. Triggers on push/PR to `main` and `develop`. Calls `johnqh/workflows/.github/workflows/unified-cicd.yml@main` with npm-access "restricted".
 
 ## Build and Publish
 
