@@ -1,5 +1,10 @@
 # CLAUDE.md - @sudobility/heavymath_lib
 
+> **Git policy — never auto-commit or auto-push.** Leave your work in the working tree.
+> Run `git commit`, `git push`, `gh pr create`, or `scripts/push_all.sh` **only when the user
+> explicitly asks in that turn**. Approval for an earlier change does not carry forward, and
+> finishing a task is not permission to commit it.
+
 ## Project Overview
 
 `@sudobility/heavymath_lib` is a React hooks library that wraps sports data fetching with user favorites management from `@sudobility/heavymath_indexer_client`. Every hook fetches sports data via the indexer proxy, fetches the user's favorites, then merges them so each item has a `favorited: boolean` flag and a `setFavorited()` method.
@@ -333,3 +338,7 @@ heavymath_app        (consumes the merged hooks)
 This library depends on `@sudobility/heavymath_indexer_client` as a **peer dependency**. The proxy hooks it wraps (e.g., `useFootballLeagues` from indexer_client) call the indexer's `/api/sports/:sport/*` endpoint, which proxies to api-sports.io with TTL caching.
 
 When indexer_client adds new sports proxy hooks, corresponding wrapper hooks should be added here to include favorites support.
+
+## Git Workflow
+
+- Do not use feature branches for code changes. Always stay on the current branch.
